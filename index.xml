@@ -39,7 +39,17 @@ include:&lt;/p></description></item><item><title>Concepts</title><link>https://o
  Traditional vs. OpenPERouter Architecture
  &lt;a class="anchor" href="#traditional-vs-openperouter-architecture">#&lt;/a>
 &lt;/h3>
-&lt;p>In traditional deployments, Kubernetes nodes connect to Top-of-Rack (ToR) switches via VLANs, and external PE routers handle EVPN tunneling. OpenPERouter moves this PE functionality directly into the Kubernetes nodes.&lt;/p></description></item><item><title>Architecture</title><link>https://openperouter.github.io/docs/architecture/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/architecture/</guid><description>&lt;p>This document describes the internal architecture of OpenPERouter and how its components work together to provide EVPN functionality on Kubernetes nodes.&lt;/p>
+&lt;p>In traditional deployments, Kubernetes nodes connect to Top-of-Rack (ToR) switches via VLANs, and external PE routers handle EVPN tunneling. OpenPERouter moves this PE functionality directly into the Kubernetes nodes.&lt;/p></description></item><item><title>MetalLB Integration</title><link>https://openperouter.github.io/docs/examples/metallb/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/metallb/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with MetalLB to advertise LoadBalancer services across the EVPN fabric, enabling external access to Kubernetes services.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>MetalLB provides load balancing for Kubernetes services by advertising service IPs via BGP. When integrated with OpenPERouter, these BGP routes are automatically converted to EVPN Type 5 routes, making the services reachable across the entire fabric.&lt;/p>
+&lt;h3 id="example-setup">
+ Example Setup
+ &lt;a class="anchor" href="#example-setup">#&lt;/a>
+&lt;/h3>
+&lt;p>The full example can be found in the &lt;a href="https://github.com/openperouter/openperouter/examples/metallb">project repository&lt;/a> and can be deployed by running&lt;/p></description></item><item><title>Architecture</title><link>https://openperouter.github.io/docs/architecture/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/architecture/</guid><description>&lt;p>This document describes the internal architecture of OpenPERouter and how its components work together to provide EVPN functionality on Kubernetes nodes.&lt;/p>
 &lt;h2 id="system-overview">
  System Overview
  &lt;a class="anchor" href="#system-overview">#&lt;/a>
@@ -58,7 +68,12 @@ include:&lt;/p></description></item><item><title>Concepts</title><link>https://o
  Router Pod
  &lt;a class="anchor" href="#router-pod">#&lt;/a>
 &lt;/h3>
-&lt;p>The router pod is the core networking component that provides the actual EVPN functionality.&lt;/p></description></item><item><title>Installation</title><link>https://openperouter.github.io/docs/installation/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/installation/</guid><description>&lt;p>This guide covers the installation of OpenPERouter using different deployment methods.&lt;/p>
+&lt;p>The router pod is the core networking component that provides the actual EVPN functionality.&lt;/p></description></item><item><title>Calico Integration</title><link>https://openperouter.github.io/docs/examples/calico/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/calico/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with Calico to advertise the pod network via an L3 EVPN and to allow pod-to-pod traffic via a VXLAN overlay.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>Calico allows each node to establish a BGP session with a router to advertise the pod network of each node and to allow pod-to-pod traffic to flow. Here we leverage OpenPERouter to provide a seamless integration with the EVPN fabric.&lt;/p></description></item><item><title>Installation</title><link>https://openperouter.github.io/docs/installation/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/installation/</guid><description>&lt;p>This guide covers the installation of OpenPERouter using different deployment methods.&lt;/p>
 &lt;h2 id="prerequisites">
  Prerequisites
  &lt;a class="anchor" href="#prerequisites">#&lt;/a>
@@ -75,7 +90,17 @@ include:&lt;/p></description></item><item><title>Concepts</title><link>https://o
  Installation Methods
  &lt;a class="anchor" href="#installation-methods">#&lt;/a>
 &lt;/h2>
-&lt;p>OpenPERouter offers several deployment methods to suit different environments and preferences:&lt;/p></description></item><item><title>Configuration</title><link>https://openperouter.github.io/docs/configuration/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/</guid><description>&lt;p>OpenPERouter requires two main configuration components: the &lt;strong>Underlay&lt;/strong> configuration for external router connectivity and &lt;strong>VNI&lt;/strong> configurations for EVPN overlays.&lt;/p>
+&lt;p>OpenPERouter offers several deployment methods to suit different environments and preferences:&lt;/p></description></item><item><title>Layer 2 Integration</title><link>https://openperouter.github.io/docs/examples/layer2/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/layer2/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with Multus to have a pod&amp;rsquo;s secondary interface connected to a layer 2 overlay.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>A layer 2 VNI is created, exposing a layer 2 domain on the host. On each node, a pod is created with a macvlan interface enslaved to that domain via a Linux bridge.&lt;/p>
+&lt;h3 id="example-setup">
+ Example Setup
+ &lt;a class="anchor" href="#example-setup">#&lt;/a>
+&lt;/h3>
+&lt;p>The full example can be found in the &lt;a href="https://github.com/openperouter/openperouter/examples/layer2">project repository&lt;/a> and can be deployed by running:&lt;/p></description></item><item><title>Configuration</title><link>https://openperouter.github.io/docs/configuration/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/</guid><description>&lt;p>OpenPERouter requires two main configuration components: the &lt;strong>Underlay&lt;/strong> configuration for external router connectivity and &lt;strong>VNI&lt;/strong> configurations for EVPN overlays.&lt;/p>
 &lt;p>All Custom Resources (CRs) must be created in the same namespace where OpenPERouter is deployed (typically &lt;code>openperouter-system&lt;/code>).&lt;/p>
 &lt;h2 id="underlay-configuration">
  Underlay Configuration
@@ -143,17 +168,7 @@ include:&lt;/p></description></item><item><title>Concepts</title><link>https://o
  VTEP IP Allocation
  &lt;a class="anchor" href="#vtep-ip-allocation">#&lt;/a>
 &lt;/h3>
-&lt;p>The &lt;code>vtepcidr&lt;/code> field defines the IP range used for VTEP (Virtual Tunnel End Point) addresses. OpenPERouter automatically assigns a unique VTEP IP to each node from this range. For example, with &lt;code>100.65.0.0/24&lt;/code>:&lt;/p></description></item><item><title>MetalLB Integration</title><link>https://openperouter.github.io/docs/examples/metallb/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/metallb/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with MetalLB to advertise LoadBalancer services across the EVPN fabric, enabling external access to Kubernetes services.&lt;/p>
-&lt;h2 id="overview">
- Overview
- &lt;a class="anchor" href="#overview">#&lt;/a>
-&lt;/h2>
-&lt;p>MetalLB provides load balancing for Kubernetes services by advertising service IPs via BGP. When integrated with OpenPERouter, these BGP routes are automatically converted to EVPN Type 5 routes, making the services reachable across the entire fabric.&lt;/p>
-&lt;h2 id="prerequisites">
- Prerequisites
- &lt;a class="anchor" href="#prerequisites">#&lt;/a>
-&lt;/h2>
-&lt;p>Before proceeding with this integration:&lt;/p></description></item><item><title>API Reference</title><link>https://openperouter.github.io/docs/api-reference/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/api-reference/</guid><description>&lt;h1 id="api-reference">
+&lt;p>The &lt;code>vtepcidr&lt;/code> field defines the IP range used for VTEP (Virtual Tunnel End Point) addresses. OpenPERouter automatically assigns a unique VTEP IP to each node from this range. For example, with &lt;code>100.65.0.0/24&lt;/code>:&lt;/p></description></item><item><title>API Reference</title><link>https://openperouter.github.io/docs/api-reference/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/api-reference/</guid><description>&lt;h1 id="api-reference">
  API Reference
  &lt;a class="anchor" href="#api-reference">#&lt;/a>
 &lt;/h1>
