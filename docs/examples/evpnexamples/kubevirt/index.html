@@ -1,0 +1,148 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Integrate OpenPERouter with KubeVirt for VM-to-VM traffic via L2 EVPN/VXLAN overlay"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://openperouter.github.io/docs/examples/evpnexamples/kubevirt/"><meta property="og:site_name" content="OpenPERouter official docs"><meta property="og:title" content="KubeVirt L2 Integration"><meta property="og:description" content="Integrate OpenPERouter with KubeVirt for VM-to-VM traffic via L2 EVPN/VXLAN overlay"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="docs"><meta property="article:published_time" content="2025-06-15T15:03:22+02:00"><meta property="article:modified_time" content="2025-06-15T15:03:22+02:00"><title>KubeVirt L2 Integration | OpenPERouter official docs</title><link rel=icon href=/favicon.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://openperouter.github.io/docs/examples/evpnexamples/kubevirt/><link rel=stylesheet href=/book.min.d5e59cb0aa8d22a5813c62cd5e25d3d172489a369c61dc3f622ee96ae1ebb457.css integrity="sha256-1eWcsKqNIqWBPGLNXiXT0XJImjacYdw/Yi7pauHrtFc=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/en.search.min.73ba38f9e1c489ebc43cf7a53893d7b8c44b222dab5b130fa59e8fa3df0c8f5f.js integrity="sha256-c7o4+eHEievEPPelOJPXuMRLIi2rWxMPpZ6Po98Mj18=" crossorigin=anonymous></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><span>OpenPERouter official docs</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><ul><li><a href=/docs/concepts/>Concepts</a><ul><li><a href=/docs/concepts/evpn/>EVPN - VXLan</a></li><li><a href=/docs/concepts/passthrough/>L3 Passthrough</a></li></ul></li><li><a href=/docs/architecture/>Architecture</a></li><li><a href=/docs/installation/>Installation</a></li><li><a href=/docs/configuration/>Configuration</a><ul><li><a href=/docs/configuration/evpn/>EVPN Configuration</a></li><li><a href=/docs/configuration/passthrough/>Passthrough Configuration</a></li></ul></li><li><a href=/docs/examples/>Examples</a><ul><li><a href=/docs/examples/evpnexamples/>EVPN Examples</a><ul><li><a href=/docs/examples/evpnexamples/metallb/>MetalLB Integration</a></li><li><a href=/docs/examples/evpnexamples/kubevirt-multi-cluster/>Stretching a layer 2 overlay across multiple KubeVirt clusters</a></li><li><a href=/docs/examples/evpnexamples/calico/>Calico Integration</a></li><li><a href=/docs/examples/evpnexamples/kubevirt/ class=active>KubeVirt L2 Integration</a></li><li><a href=/docs/examples/evpnexamples/layer2/>Layer 2 Integration</a></li></ul></li><li><a href=/docs/examples/passthroughexamples/>Passthrough Examples</a><ul><li><a href=/docs/examples/passthroughexamples/metallb/>MetalLB Integration</a></li></ul></li></ul></li><li><a href=/docs/api-reference/>API Reference</a></li><li><a href=/docs/contributing/>Contributing</a><ul><li><a href=/docs/contributing/devenv/>The development environment</a></li><li><a href=/docs/contributing/code-of-conduct/>Code of Conduct</a></li><li><a href=/docs/contributing/how-to-release/>How to release</a></li></ul></li><li><a href=/docs/release-notes/>Release Notes</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>KubeVirt L2 Integration</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#overview>Overview</a><ul><li><a href=#architecture>Architecture</a></li></ul></li><li><a href=#example-setup>Example Setup</a></li><li><a href=#configuration>Configuration</a><ul><li><a href=#1-openperouter-resources>1. OpenPERouter Resources</a></li><li><a href=#2-network-attachment-definition>2. Network Attachment Definition</a></li><li><a href=#3-virtual-machine-configuration>3. Virtual Machine Configuration</a></li></ul></li><li><a href=#validation>Validation</a><ul><li><a href=#vm-to-vm-connectivity>VM-to-VM Connectivity</a></li><li><a href=#packet-flow-verification>Packet Flow Verification</a></li><li><a href=#vm-to-external-l3-connectivity>VM-to-External L3 Connectivity</a></li><li><a href=#live-migration-testing>Live Migration Testing</a></li></ul></li><li><a href=#troubleshooting>Troubleshooting</a><ul><li><a href=#common-issues>Common Issues</a></li><li><a href=#debug-commands>Debug Commands</a></li></ul></li></ul></nav></aside></header><article class="markdown book-article"><p>This example demonstrates how to connect KubeVirt virtual machines to an L2 EVPN/VXLAN overlay using OpenPERouter, extending the <a href=layer2.md>Layer 2 integration example</a>.</p><h2 id=overview>Overview
+<a class=anchor href=#overview>#</a></h2><p>The setup creates both Layer 2 and Layer 3 VNIs, with OpenPERouter automatically creating a Linux bridge on the host. Two KubeVirt virtual machines are connected to this bridge via Multus secondary interfaces of type <code>bridge</code>.</p><h3 id=architecture>Architecture
+<a class=anchor href=#architecture>#</a></h3><ul><li><strong>L3VNI (VNI 100)</strong>: Provides routing capabilities and connects to external networks</li><li><strong>L2VNI (VNI 110)</strong>: Creates a Layer 2 domain for VM-to-VM communication</li><li><strong>Linux Bridge</strong>: Automatically created by OpenPERouter for VM connectivity</li><li><strong>VM Connectivity</strong>: VMs connect to the bridge using Multus network attachments</li></ul><p><img src=/images/openpel2kubevirt.svg alt="KubeVirt L2 Integration"></p><h2 id=example-setup>Example Setup
+<a class=anchor href=#example-setup>#</a></h2><blockquote><p><strong>Note:</strong> Some operating systems have their <code>inotify.max_user_intances</code>
+set too low to support larger kind clusters. This leads to:</p><ul><li>virt-handler failing with CrashLoopBackOff, logging <code>panic: Failed to create an inotify watcher</code></li><li>nodemarker failing with CrashLoopBackOff, logging <code>too many open files</code></li></ul><p>If that happens in your setup, you may want to increase the limit with:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>sysctl -w fs.inotify.max_user_instances<span style=color:#f92672>=</span><span style=color:#ae81ff>1024</span>
+</span></span></code></pre></div></blockquote><p>The full example can be found in the <a href=https://github.com/openperouter/openperouter/examples/evpn/kubevirt>project repository</a> and can be deployed by running:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>make docker-build demo-kubevirt
+</span></span></code></pre></div><p>The example configures both an L2 VNI and an L3 VNI. The L2 VNI belongs to the L3 VNI&rsquo;s routing domain. VMs are connected into a single L2 overlay. Additionally, the VMs are able to reach the broader L3 domain, and are reachable from the broader L3 domain.</p><h2 id=configuration>Configuration
+<a class=anchor href=#configuration>#</a></h2><h3 id=1-openperouter-resources>1. OpenPERouter Resources
+<a class=anchor href=#1-openperouter-resources>#</a></h3><p>Create the L3VNI and L2VNI resources:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>L3VNI</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vrf</span>: <span style=color:#ae81ff>red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vni</span>: <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>hostsession</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64514</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>hostasn</span>: <span style=color:#ae81ff>64515</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>localcidr</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>ipv4</span>: <span style=color:#ae81ff>192.169.10.0</span><span style=color:#ae81ff>/24</span>
+</span></span><span style=display:flex><span>---
+</span></span><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>L2VNI</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>layer2</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>hostmaster</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>autocreate</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>type</span>: <span style=color:#ae81ff>bridge</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>l2gatewayip</span>: <span style=color:#ae81ff>192.170.1.1</span><span style=color:#ae81ff>/24</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vni</span>: <span style=color:#ae81ff>110</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vrf</span>: <span style=color:#ae81ff>red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vxlanport</span>: <span style=color:#ae81ff>4789</span>
+</span></span></code></pre></div><p><strong>Key Configuration Points:</strong></p><ul><li>The L2VNI references the L3VNI via the <code>vrf: red</code> field, enabling routed traffic</li><li><code>hostmaster.autocreate: true</code> creates a <code>br-hs-110</code> bridge on the host</li><li><code>l2gatewayip</code> defines the gateway IP for the VM subnet</li></ul><h3 id=2-network-attachment-definition>2. Network Attachment Definition
+<a class=anchor href=#2-network-attachment-definition>#</a></h3><p>Create a Multus network attachment definition for the bridge:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>k8s.cni.cncf.io/v1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>NetworkAttachmentDefinition</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>evpn</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>config</span>: |<span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    {
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &#34;cniVersion&#34;: &#34;0.3.1&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &#34;name&#34;: &#34;evpn&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &#34;type&#34;: &#34;bridge&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &#34;bridge&#34;: &#34;br-hs-110&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &#34;macspoofchk&#34;: false,
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>      &#34;disableContainerInterface&#34;: true
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    }</span>
+</span></span></code></pre></div><h3 id=3-virtual-machine-configuration>3. Virtual Machine Configuration
+<a class=anchor href=#3-virtual-machine-configuration>#</a></h3><p>Create two virtual machines with network connectivity:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>kubevirt.io/v1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>VirtualMachine</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>vm-1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>runStrategy</span>: <span style=color:#ae81ff>Always</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>template</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>labels</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>kubevirt.io/vm</span>: <span style=color:#ae81ff>vm-1</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>domain</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>devices</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>interfaces</span>:
+</span></span><span style=display:flex><span>          - <span style=color:#f92672>bridge</span>: {}
+</span></span><span style=display:flex><span>            <span style=color:#f92672>name</span>: <span style=color:#ae81ff>evpn</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>disks</span>:
+</span></span><span style=display:flex><span>          - <span style=color:#f92672>disk</span>:
+</span></span><span style=display:flex><span>              <span style=color:#f92672>bus</span>: <span style=color:#ae81ff>virtio</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>name</span>: <span style=color:#ae81ff>containerdisk</span>
+</span></span><span style=display:flex><span>          - <span style=color:#f92672>disk</span>:
+</span></span><span style=display:flex><span>              <span style=color:#f92672>bus</span>: <span style=color:#ae81ff>virtio</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>name</span>: <span style=color:#ae81ff>cloudinitdisk</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>resources</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>requests</span>:
+</span></span><span style=display:flex><span>            <span style=color:#f92672>memory</span>: <span style=color:#ae81ff>2048M</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>machine</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>networks</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>evpn</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>multus</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>networkName</span>: <span style=color:#ae81ff>evpn</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>terminationGracePeriodSeconds</span>: <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>volumes</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>containerDisk</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>image</span>: <span style=color:#ae81ff>quay.io/kubevirt/fedora-with-test-tooling-container-disk:v1.1.0</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>name</span>: <span style=color:#ae81ff>containerdisk</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>cloudInitNoCloud</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>networkData</span>: |<span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>            version: 2
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>            ethernets:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>              eth0:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>                addresses:
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>                - 192.170.1.3/24
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>                gateway4: 192.170.1.1</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>name</span>: <span style=color:#ae81ff>cloudinitdisk</span>
+</span></span></code></pre></div><p><strong>VM Configuration Details:</strong></p><ul><li>Uses the <code>evpn</code> network attachment for bridge connectivity</li><li>Cloud-init configures the VM&rsquo;s IP address and default gateway</li><li>Second VM is using IP <code>192.170.1.4/24</code> and name <code>vm-2</code></li></ul><h2 id=validation>Validation
+<a class=anchor href=#validation>#</a></h2><h3 id=vm-to-vm-connectivity>VM-to-VM Connectivity
+<a class=anchor href=#vm-to-vm-connectivity>#</a></h3><p>Test connectivity between the two VMs:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Connect to VM console</span>
+</span></span><span style=display:flex><span>virtctl console vm-1
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># It may take about 2 minutes to start up and get to the login.</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Once it does, login with username &#34;fedora&#34; an password &#34;fedora&#34;.</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Test ping to the other VM</span>
+</span></span><span style=display:flex><span>ping 192.170.1.4
+</span></span></code></pre></div><p>Expected output:</p><pre tabindex=0><code>PING 192.170.1.4 (192.170.1.4): 56 data bytes
+64 bytes from 192.170.1.4: seq=0 ttl=64 time=0.470 ms
+64 bytes from 192.170.1.4: seq=1 ttl=64 time=0.321 ms
+</code></pre><h3 id=packet-flow-verification>Packet Flow Verification
+<a class=anchor href=#packet-flow-verification>#</a></h3><p>Monitor packet flow on the router to verify traffic:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Check packets flowing through the bridge</span>
+</span></span><span style=display:flex><span>tcpdump -i br-hs-110 -n
+</span></span></code></pre></div><p>Expected packet flow:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>13:56:16.151606 pe-110 P   IP 192.170.1.3 &gt; 192.170.1.4: ICMP echo request
+</span></span><span style=display:flex><span>13:56:16.151610 vni110 Out IP 192.170.1.3 &gt; 192.170.1.4: ICMP echo request
+</span></span><span style=display:flex><span>13:56:16.152073 vni110 P   IP 192.170.1.4 &gt; 192.170.1.3: ICMP echo reply
+</span></span><span style=display:flex><span>13:56:16.152075 pe-110 Out IP 192.170.1.4 &gt; 192.170.1.3: ICMP echo reply
+</span></span></code></pre></div><h3 id=vm-to-external-l3-connectivity>VM-to-External L3 Connectivity
+<a class=anchor href=#vm-to-external-l3-connectivity>#</a></h3><p>With <code>192.168.20.2</code> being the IP of the host on the red network:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Run this from the VM console</span>
+</span></span><span style=display:flex><span>curl 192.168.20.2:8090/clientip
+</span></span></code></pre></div><p>Expected output:</p><pre tabindex=0><code>192.170.1.3:37144
+</code></pre><p>The pod is able to reach a host on the layer 3 network and the IP is preserved.</p><p>When monitoring traffic:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>18:01:50.406263 pe-110 P   IP 192.170.1.3 &gt; 192.168.20.2: ICMP echo request, id 21760, seq 0, length <span style=color:#ae81ff>64</span>
+</span></span><span style=display:flex><span>18:01:50.406267 br-pe-110 In  IP 192.170.1.3 &gt; 192.168.20.2: ICMP echo request, id 21760, seq 0, length <span style=color:#ae81ff>64</span>
+</span></span><span style=display:flex><span>18:01:50.406284 br-pe-100 Out IP 192.170.1.3 &gt; 192.168.20.2: ICMP echo request, id 21760, seq 0, length <span style=color:#ae81ff>64</span>
+</span></span><span style=display:flex><span>18:01:50.406287 vni100 Out IP 192.170.1.3 &gt; 192.168.20.2: ICMP echo request, id 21760, seq 0, length <span style=color:#ae81ff>64</span>
+</span></span><span style=display:flex><span>18:01:50.406295 toswitch Out IP 100.65.0.0.39370 &gt; 100.64.0.1.4789: VXLAN, flags <span style=color:#f92672>[</span>I<span style=color:#f92672>]</span> <span style=color:#f92672>(</span>0x08<span style=color:#f92672>)</span>, vni <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>IP 192.170.1.3 &gt; 192.168.20.2: ICMP echo request, id 21760, seq 0, length <span style=color:#ae81ff>64</span>
+</span></span></code></pre></div><p><strong>Traffic Flow Analysis:</strong>
+We see that the packet comes from the veth interface towards the bridge associated with VNI 110 (the default gateway), then is routed to the bridge corresponding to the layer 3 domain and finally encapsulated.</p><h3 id=live-migration-testing>Live Migration Testing
+<a class=anchor href=#live-migration-testing>#</a></h3><p>Verify that connectivity persists during live migration:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Start continuous ping from one VM to another</span>
+</span></span><span style=display:flex><span>ping 192.170.1.4
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># In another terminal, initiate live migration</span>
+</span></span><span style=display:flex><span>virtctl migrate vm-2
+</span></span></code></pre></div><p>The ping should continue working throughout the migration process.</p><h2 id=troubleshooting>Troubleshooting
+<a class=anchor href=#troubleshooting>#</a></h2><h3 id=common-issues>Common Issues
+<a class=anchor href=#common-issues>#</a></h3><ol><li><strong>Bridge not created</strong>: Verify the L2VNI has <code>hostmaster.autocreate: true</code></li><li><strong>VM cannot reach gateway</strong>: Check that the VM&rsquo;s IP is in the same subnet as <code>l2gatewayip</code></li><li><strong>No VM-to-VM connectivity</strong>: Ensure both VMs are connected to the same bridge (<code>br-hs-110</code>)</li></ol><h3 id=debug-commands>Debug Commands
+<a class=anchor href=#debug-commands>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Check bridge creation</span>
+</span></span><span style=display:flex><span>ip link show br-hs-110
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Verify network attachment</span>
+</span></span><span style=display:flex><span>kubectl get network-attachment-definitions
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Check VM network interfaces</span>
+</span></span><span style=display:flex><span>virtctl console vm-1
+</span></span><span style=display:flex><span>ip addr show
+</span></span></code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#overview>Overview</a><ul><li><a href=#architecture>Architecture</a></li></ul></li><li><a href=#example-setup>Example Setup</a></li><li><a href=#configuration>Configuration</a><ul><li><a href=#1-openperouter-resources>1. OpenPERouter Resources</a></li><li><a href=#2-network-attachment-definition>2. Network Attachment Definition</a></li><li><a href=#3-virtual-machine-configuration>3. Virtual Machine Configuration</a></li></ul></li><li><a href=#validation>Validation</a><ul><li><a href=#vm-to-vm-connectivity>VM-to-VM Connectivity</a></li><li><a href=#packet-flow-verification>Packet Flow Verification</a></li><li><a href=#vm-to-external-l3-connectivity>VM-to-External L3 Connectivity</a></li><li><a href=#live-migration-testing>Live Migration Testing</a></li></ul></li><li><a href=#troubleshooting>Troubleshooting</a><ul><li><a href=#common-issues>Common Issues</a></li><li><a href=#debug-commands>Debug Commands</a></li></ul></li></ul></nav></div></aside></main></body></html>

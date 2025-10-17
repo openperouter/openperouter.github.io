@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Configuration on OpenPERouter official docs</title><link>https://openperouter.github.io/docs/configuration/</link><description>Recent content in Configuration on OpenPERouter official docs</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 15:03:22 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/configuration/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN Configuration</title><link>https://openperouter.github.io/docs/configuration/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/evpn/</guid><description>&lt;h2 id="underlay-configuration">
+ Underlay Configuration
+ &lt;a class="anchor" href="#underlay-configuration">#&lt;/a>
+&lt;/h2>
+&lt;p>In addition to the configuration described in the &lt;a href="https://openperouter.github.io/docs/configuration/#underlay-configuration">underlay configuration section&lt;/a>, the VTEP IP allocation strategy must be provided (&lt;strong>Note the evpn field&lt;/strong>).&lt;/p>
+&lt;h3 id="basic-underlay-configuration">
+ Basic Underlay Configuration
+ &lt;a class="anchor" href="#basic-underlay-configuration">#&lt;/a>
+&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">namespace&lt;/span>: &lt;span style="color:#ae81ff">openperouter-system&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">spec&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">evpn&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">vtepcidr&lt;/span>: &lt;span style="color:#ae81ff">100.65.0.0&lt;/span>&lt;span style="color:#ae81ff">/24&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">nics&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">toswitch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64512&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">192.168.11.2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="configuration-fields">
+ Configuration Fields
+ &lt;a class="anchor" href="#configuration-fields">#&lt;/a>
+&lt;/h3>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Field&lt;/th>
+ &lt;th>Type&lt;/th>
+ &lt;th>Description&lt;/th>
+ &lt;th>Required&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>asn&lt;/code>&lt;/td>
+ &lt;td>integer&lt;/td>
+ &lt;td>Local ASN for BGP sessions&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>evpn.vtepcidr&lt;/code>&lt;/td>
+ &lt;td>string&lt;/td>
+ &lt;td>CIDR block for VTEP IP allocation&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>nics&lt;/code>&lt;/td>
+ &lt;td>array&lt;/td>
+ &lt;td>List of network interface names to move to router namespace&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>neighbors&lt;/code>&lt;/td>
+ &lt;td>array&lt;/td>
+ &lt;td>List of BGP neighbors to peer with&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;h3 id="vtep-ip-allocation">
+ VTEP IP Allocation
+ &lt;a class="anchor" href="#vtep-ip-allocation">#&lt;/a>
+&lt;/h3>
+&lt;p>The &lt;code>evpn.vtepcidr&lt;/code> field defines the IP range used for VTEP (Virtual Tunnel End Point) addresses. OpenPERouter automatically assigns a unique VTEP IP to each node from this range. For example, with &lt;code>100.65.0.0/24&lt;/code>:&lt;/p></description></item><item><title>Passthrough Configuration</title><link>https://openperouter.github.io/docs/configuration/passthrough/</link><pubDate>Mon, 27 Jan 2025 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/passthrough/</guid><description>&lt;h2 id="underlay-configuration">
+ Underlay Configuration
+ &lt;a class="anchor" href="#underlay-configuration">#&lt;/a>
+&lt;/h2>
+&lt;p>For passthrough mode, the underlay configuration is simpler than EVPN mode as it doesn&amp;rsquo;t require VTEP IP allocation. The configuration focuses on establishing BGP sessions with external routers.&lt;/p>
+&lt;h3 id="basic-underlay-configuration">
+ Basic Underlay Configuration
+ &lt;a class="anchor" href="#basic-underlay-configuration">#&lt;/a>
+&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">namespace&lt;/span>: &lt;span style="color:#ae81ff">openperouter-system&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">spec&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">nics&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">toswitch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64512&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">192.168.11.2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="configuration-fields">
+ Configuration Fields
+ &lt;a class="anchor" href="#configuration-fields">#&lt;/a>
+&lt;/h3>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Field&lt;/th>
+ &lt;th>Type&lt;/th>
+ &lt;th>Description&lt;/th>
+ &lt;th>Required&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>asn&lt;/code>&lt;/td>
+ &lt;td>integer&lt;/td>
+ &lt;td>Local ASN for BGP sessions&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>nics&lt;/code>&lt;/td>
+ &lt;td>array&lt;/td>
+ &lt;td>List of network interface names to move to router namespace&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>neighbors&lt;/code>&lt;/td>
+ &lt;td>array&lt;/td>
+ &lt;td>List of BGP neighbors to peer with&lt;/td>
+ &lt;td>Yes&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;p>&lt;strong>Note&lt;/strong>: Unlike EVPN mode, passthrough mode does not require an &lt;code>evpn&lt;/code> field in the underlay configuration since no VTEP IP allocation is needed.&lt;/p></description></item></channel></rss>

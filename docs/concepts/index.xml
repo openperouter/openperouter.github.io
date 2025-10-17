@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Concepts on OpenPERouter official docs</title><link>https://openperouter.github.io/docs/concepts/</link><description>Recent content in Concepts on OpenPERouter official docs</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 15:03:22 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/concepts/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN - VXLan</title><link>https://openperouter.github.io/docs/concepts/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/evpn/</guid><description>&lt;p>OpenPERouter implements EVPN (Ethernet VPN) over VXLAN to provide scalable overlay networking. EVPN serves as the control plane protocol that enables the distribution of MAC and IP reachability information across the network fabric, while VXLAN provides the data plane encapsulation for overlay traffic.&lt;/p>
+&lt;p>The solution supports two main overlay types:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>L3VNI (Layer 3 Virtual Network Identifier)&lt;/strong>: Creates routed overlay networks where IP connectivity is extended across the fabric. Each L3VNI corresponds to a VRF (Virtual Routing and Forwarding) instance that maintains separate routing tables and enables IP-based communication between endpoints.&lt;/p></description></item><item><title>L3 Passthrough</title><link>https://openperouter.github.io/docs/concepts/passthrough/</link><pubDate>Mon, 27 Jan 2025 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/passthrough/</guid><description>&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>L3 Passthrough is a networking mode in OpenPERouter that provides direct BGP connectivity between the host and the BGP fabric without encapsulation. Unlike EVPN mode which uses VXLAN tunnels, passthrough mode allows the host to participate directly in the BGP fabric as a peer.&lt;/p>
+&lt;h2 id="key-characteristics">
+ Key Characteristics
+ &lt;a class="anchor" href="#key-characteristics">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="direct-bgp-participation">
+ Direct BGP Participation
+ &lt;a class="anchor" href="#direct-bgp-participation">#&lt;/a>
+&lt;/h3>
+&lt;p>In passthrough mode, OpenPERouter establishes a BGP session directly with BGP-speaking components on the host (such as MetalLB). This session operates in the same BGP domain as the fabric, allowing the host to:&lt;/p></description></item></channel></rss>

@@ -8,9 +8,11 @@
 &lt;li>Two kind nodes connected to a leaf, running OpenPERouter&lt;/li>
 &lt;li>A spine container&lt;/li>
 &lt;li>Two EVPN enabled leaves, leafA and leafB&lt;/li>
-&lt;li>For each leaf, two hosts connected to a type 5 EVPN (VNI 100 and 200)&lt;/li>
+&lt;li>For each leaf, two hosts connected to two different VRFs (red and blue)&lt;/li>
+&lt;li>One host connected to the default VRF of leafA&lt;/li>
 &lt;/ul>
-&lt;p>The kubeconfig file required to interact with the cluster is created under &lt;code>bin/kubeconfig&lt;/code>.&lt;/p></description></item><item><title>Code of Conduct</title><link>https://openperouter.github.io/docs/contributing/code-of-conduct/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://openperouter.github.io/docs/contributing/code-of-conduct/</guid><description>&lt;h2 id="our-pledge">
+&lt;p>By default, the two VRFs are exposed as type 5 EVPN (VNI 100 and 200) from leafA and leafB
+to the rest of the fabric.&lt;/p></description></item><item><title>Code of Conduct</title><link>https://openperouter.github.io/docs/contributing/code-of-conduct/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://openperouter.github.io/docs/contributing/code-of-conduct/</guid><description>&lt;h2 id="our-pledge">
  Our Pledge
  &lt;a class="anchor" href="#our-pledge">#&lt;/a>
 &lt;/h2>
@@ -25,4 +27,29 @@ orientation.&lt;/p>
  &lt;a class="anchor" href="#our-standards">#&lt;/a>
 &lt;/h2>
 &lt;p>Examples of behavior that contributes to creating a positive environment
-include:&lt;/p></description></item></channel></rss>
+include:&lt;/p></description></item><item><title>How to release</title><link>https://openperouter.github.io/docs/contributing/how-to-release/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/contributing/how-to-release/</guid><description>&lt;h1 id="release-process">
+ Release process
+ &lt;a class="anchor" href="#release-process">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="preparing-the-branch">
+ Preparing the branch
+ &lt;a class="anchor" href="#preparing-the-branch">#&lt;/a>
+&lt;/h2>
+&lt;p>Checkout the release branch and merge main or cherry pick the relevant commits:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git checkout v0.9
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git merge main
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="using-cherry-picks">
+ Using cherry picks
+ &lt;a class="anchor" href="#using-cherry-picks">#&lt;/a>
+&lt;/h3>
+&lt;p>In case only a subset of the changes are brought to the new release, cherry-pick
+must be used.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git checkout v0.9
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git cherry-pick -x f1f86ed658c1e8a6f90f967ed94881d61476b4c0
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="clean-the-working-directory">
+ Clean the working directory
+ &lt;a class="anchor" href="#clean-the-working-directory">#&lt;/a>
+&lt;/h2>
+&lt;p>The release script only works if the Git working directory is completely clean: no pending modifications, no untracked files, nothing. Make sure everything is clean, or run the release from a fresh checkout.&lt;/p></description></item></channel></rss>

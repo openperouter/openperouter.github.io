@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Passthrough Examples on OpenPERouter official docs</title><link>https://openperouter.github.io/docs/examples/passthroughexamples/</link><description>Recent content in Passthrough Examples on OpenPERouter official docs</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 15:03:22 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/examples/passthroughexamples/index.xml" rel="self" type="application/rss+xml"/><item><title>MetalLB Integration</title><link>https://openperouter.github.io/docs/examples/passthroughexamples/metallb/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/passthroughexamples/metallb/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with MetalLB in passthrough mode to advertise LoadBalancer services across the fabric, enabling external access to Kubernetes services.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>MetalLB provides load balancing for Kubernetes services by advertising service IPs via BGP. When integrated with OpenPERouter in passthrough mode, these BGP routes are directly advertised to the fabric without EVPN encapsulation, providing a simpler networking model for basic connectivity scenarios.&lt;/p>
+&lt;h3 id="example-setup">
+ Example Setup
+ &lt;a class="anchor" href="#example-setup">#&lt;/a>
+&lt;/h3>
+&lt;p>The full example can be found in the &lt;a href="https://github.com/openperouter/openperouter/examples/passthrough/metallb">project repository&lt;/a> and can be deployed by running&lt;/p></description></item></channel></rss>
