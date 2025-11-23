@@ -131,6 +131,19 @@
  Release Notes
  &lt;a class="anchor" href="#release-notes">#&lt;/a>
 &lt;/h2>
+&lt;h2 id="release-v005">
+ Release v0.0.5
+ &lt;a class="anchor" href="#release-v005">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="bug-fixes">
+ Bug fixes
+ &lt;a class="anchor" href="#bug-fixes">#&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>Fix flag &lt;code>--metrics-bind-address&lt;/code> being ignored on controller and nodemarker binaries (#148, @fdomain)&lt;/li>
+&lt;li>Fix: allow omitting underlay NIC configuration when using Multus. (#155, @fdomain)&lt;/li>
+&lt;li>Re-introduce the &amp;ldquo;redistribute-connected-from-default&amp;rdquo; flag when generating FRR configurations for the KinD leaves (#151, @maiqueb)&lt;/li>
+&lt;/ul>
 &lt;h2 id="release-v004">
  Release v0.0.4
  &lt;a class="anchor" href="#release-v004">#&lt;/a>
@@ -148,9 +161,9 @@ This might come handy for those scenarios where we want the host to reach the &a
 &lt;li>Enforce the session with the host / with the TOR to be ebgp. (#95, @fedepaol)&lt;/li>
 &lt;li>Optional hostsession in the L3VNI CRD, now it&amp;rsquo;s not mandatory to setup a session if a l3vni serves as L3 wrapper of a L2 VNI. (#102, @fedepaol)&lt;/li>
 &lt;/ul>
-&lt;h3 id="bug-fixes">
+&lt;h3 id="bug-fixes-1">
  Bug fixes
- &lt;a class="anchor" href="#bug-fixes">#&lt;/a>
+ &lt;a class="anchor" href="#bug-fixes-1">#&lt;/a>
 &lt;/h3>
 &lt;ul>
 &lt;li>Fix cr based validation of the nic name in the underlay crd. (#130, @fedepaol)&lt;/li>
