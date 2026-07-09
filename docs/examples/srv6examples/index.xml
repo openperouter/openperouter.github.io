@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SRv6 L3VPN Examples on</title><link>https://openperouter.github.io/docs/examples/srv6examples/</link><description>Recent content in SRv6 L3VPN Examples on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 15:03:22 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/examples/srv6examples/index.xml" rel="self" type="application/rss+xml"/><item><title>MetalLB Integration</title><link>https://openperouter.github.io/docs/examples/srv6examples/metallb/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/srv6examples/metallb/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with MetalLB to
+advertise LoadBalancer services across the SRv6 L3VPN fabric, enabling
+external access to Kubernetes services.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>MetalLB provides load balancing for Kubernetes services by advertising
+service IPs via BGP. When integrated with OpenPERouter, these BGP routes
+are automatically redistributed into the SRv6 L3VPN, making the services
+reachable across the entire fabric.&lt;/p>
+&lt;h3 id="example-setup">
+ Example Setup
+ &lt;a class="anchor" href="#example-setup">#&lt;/a>
+&lt;/h3>
+&lt;p>The full example can be found in the
+&lt;a href="https://github.com/openperouter/openperouter/examples/l3vpn/metallb">project repository&lt;/a>
+and can be deployed by running&lt;/p></description></item><item><title>Layer 2 Integration</title><link>https://openperouter.github.io/docs/examples/srv6examples/layer2/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/srv6examples/layer2/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with Multus to
+have a pod&amp;rsquo;s secondary interface connected to a layer 2 overlay, using
+SRv6 as the underlay.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>A layer 2 VNI is created, exposing a layer 2 domain on the host. On each
+node, a pod is created with a macvlan interface enslaved to that domain
+via a Linux bridge.&lt;/p>
+&lt;h3 id="example-setup">
+ Example Setup
+ &lt;a class="anchor" href="#example-setup">#&lt;/a>
+&lt;/h3>
+&lt;p>The full example can be found in the
+&lt;a href="https://github.com/openperouter/openperouter/examples/l3vpn/layer2">project repository&lt;/a>
+and can be deployed by running:&lt;/p></description></item></channel></rss>

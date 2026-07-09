@@ -1,8 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Concepts on OpenPERouter official docs</title><link>https://openperouter.github.io/docs/concepts/</link><description>Recent content in Concepts on OpenPERouter official docs</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 15:03:22 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/concepts/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN - VXLan</title><link>https://openperouter.github.io/docs/concepts/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/evpn/</guid><description>&lt;p>OpenPERouter implements EVPN (Ethernet VPN) over VXLAN to provide scalable overlay networking. EVPN serves as the control plane protocol that enables the distribution of MAC and IP reachability information across the network fabric, while VXLAN provides the data plane encapsulation for overlay traffic.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Concepts on</title><link>https://openperouter.github.io/docs/concepts/</link><description>Recent content in Concepts on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 04 May 2026 00:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/concepts/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN - VXLan</title><link>https://openperouter.github.io/docs/concepts/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/evpn/</guid><description>&lt;p>OpenPERouter implements EVPN (Ethernet VPN) over VXLAN to provide scalable overlay networking. EVPN serves as the control plane protocol that enables the distribution of MAC and IP reachability information across the network fabric, while VXLAN provides the data plane encapsulation for overlay traffic.&lt;/p>
 &lt;p>The solution supports two main overlay types:&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>&lt;strong>L3VNI (Layer 3 Virtual Network Identifier)&lt;/strong>: Creates routed overlay networks where IP connectivity is extended across the fabric. Each L3VNI corresponds to a VRF (Virtual Routing and Forwarding) instance that maintains separate routing tables and enables IP-based communication between endpoints.&lt;/p></description></item><item><title>L3 Passthrough</title><link>https://openperouter.github.io/docs/concepts/passthrough/</link><pubDate>Mon, 27 Jan 2025 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/passthrough/</guid><description>&lt;h2 id="overview">
+&lt;p>&lt;strong>L3VNI (Layer 3 Virtual Network Identifier)&lt;/strong>: Creates routed overlay networks where IP connectivity is extended across the fabric. Each L3VNI corresponds to a VRF (Virtual Routing and Forwarding) instance that maintains separate routing tables and enables IP-based communication between endpoints.&lt;/p></description></item><item><title>SRv6 - L3VPN</title><link>https://openperouter.github.io/docs/concepts/srv6/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/srv6/</guid><description>&lt;p>OpenPERouter implements SRv6 (Segment Routing over IPv6) L3VPN to provide
+scalable overlay networking. BGP VPNv4/VPNv6 serves as the control plane
+protocol that enables the distribution of IP reachability information across
+the network fabric, while SRv6 provides the data plane encapsulation for L3
+overlay traffic. IS-IS is used as the IGP for underlay reachability.&lt;/p>
+&lt;p>The solution supports two main overlay types:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>L3VPN (Layer 3 VPN)&lt;/strong>: Creates routed overlay networks where IP
+connectivity is extended across the fabric using SRv6 encapsulation. Each
+L3VPN corresponds to a VRF (Virtual Routing and Forwarding) instance that
+maintains separate routing tables with explicit route distinguishers and
+route targets.&lt;/p></description></item><item><title>L3 Passthrough</title><link>https://openperouter.github.io/docs/concepts/passthrough/</link><pubDate>Mon, 27 Jan 2025 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/passthrough/</guid><description>&lt;h2 id="overview">
  Overview
  &lt;a class="anchor" href="#overview">#&lt;/a>
 &lt;/h2>
@@ -15,4 +27,10 @@
  Direct BGP Participation
  &lt;a class="anchor" href="#direct-bgp-participation">#&lt;/a>
 &lt;/h3>
-&lt;p>In passthrough mode, OpenPERouter establishes a BGP session directly with BGP-speaking components on the host (such as MetalLB). This session operates in the same BGP domain as the fabric, allowing the host to:&lt;/p></description></item></channel></rss>
+&lt;p>In passthrough mode, OpenPERouter establishes a BGP session directly with BGP-speaking components on the host (such as MetalLB). This session operates in the same BGP domain as the fabric, allowing the host to:&lt;/p></description></item><item><title>Router Resiliency</title><link>https://openperouter.github.io/docs/concepts/resiliency/</link><pubDate>Mon, 04 May 2026 00:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/concepts/resiliency/</guid><description>&lt;p>This page explains how OpenPERouter keeps the data plane running when FRR crashes or restarts.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>In a traditional container-based router deployment, the container runtime owns the network namespace. When FRR dies, the namespace is destroyed — tearing down all VXLAN tunnels, VRFs, bridges, veths, and routes. Every workload on the node loses VPN connectivity until the container restarts and the control plane reconverges.&lt;/p>
+&lt;p>OpenPERouter solves this by running FRR inside a &lt;strong>persistent named network namespace&lt;/strong> (&lt;code>/var/run/netns/perouter&lt;/code>). The namespace is created and owned by the controller, held open by a bind mount, and independent of any process. When FRR dies, the namespace stays — and so does the data plane.&lt;/p></description></item></channel></rss>

@@ -1,13 +1,77 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Configuration on OpenPERouter official docs</title><link>https://openperouter.github.io/docs/configuration/</link><description>Recent content in Configuration on OpenPERouter official docs</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 03 Mar 2026 10:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/configuration/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN Configuration</title><link>https://openperouter.github.io/docs/configuration/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/evpn/</guid><description>&lt;h2 id="underlay-configuration">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Configuration on</title><link>https://openperouter.github.io/docs/configuration/</link><description>Recent content in Configuration on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 07 May 2026 09:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/configuration/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN Configuration</title><link>https://openperouter.github.io/docs/configuration/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/evpn/</guid><description>&lt;h2 id="underlay-configuration">
  Underlay Configuration
  &lt;a class="anchor" href="#underlay-configuration">#&lt;/a>
 &lt;/h2>
-&lt;p>In addition to the configuration described in the &lt;a href="https://openperouter.github.io/docs/configuration/#underlay-configuration">underlay configuration section&lt;/a>, the VTEP (Virtual Tunnel End Point) source must be configured via the &lt;code>evpn&lt;/code> field. There are two mutually exclusive options:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>&lt;code>vtepcidr&lt;/code>&lt;/strong>: OpenPERouter creates a loopback interface and allocates a unique VTEP IP per node from the given CIDR. OpenPERouter advertises the VTEP IP into the fabric via BGP.&lt;/li>
-&lt;li>&lt;strong>&lt;code>vtepInterface&lt;/code>&lt;/strong>: OpenPERouter uses an existing interface (and its IP) as the VTEP source. The ToR is responsible for advertising the interface IP into the fabric (e.g. via &lt;code>redistribute connected&lt;/code>).&lt;/li>
-&lt;/ul>
-&lt;p>Exactly one of the two must be specified.&lt;/p></description></item><item><title>Running different configurations on different nodes</title><link>https://openperouter.github.io/docs/configuration/node-selector/</link><pubDate>Tue, 13 Jan 2026 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/node-selector/</guid><description>&lt;h2 id="overview">
+&lt;p>In addition to the configuration described in the &lt;a href="https://openperouter.github.io/docs/configuration/#underlay-configuration">underlay configuration section&lt;/a>, the VTEP (Virtual Tunnel End Point) source must be configured via the &lt;code>evpn.vtepCIDR&lt;/code> field.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">namespace&lt;/span>: &lt;span style="color:#ae81ff">openperouter-system&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">spec&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">tunnelEndpoint&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">cidrs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">100.65.0.0&lt;/span>&lt;span style="color:#ae81ff">/24&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaces&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">type&lt;/span>: &lt;span style="color:#ae81ff">NetworkDevice&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">networkDevice&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaceName&lt;/span>: &lt;span style="color:#ae81ff">toswitch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64512&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">192.168.11.2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>tunnelEndpoint.cidrs&lt;/code> field defines the IP range used for VTEP addresses. OpenPERouter automatically assigns a unique VTEP IP to each node from this range. At least one CIDR (IPv4 or IPv6) is required, and both may be specified for dual-stack operation. For example, with &lt;code>100.65.0.0/24&lt;/code>:&lt;/p></description></item><item><title>SRv6 L3VPN Configuration</title><link>https://openperouter.github.io/docs/configuration/srv6/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/srv6/</guid><description>&lt;h2 id="underlay-configuration">
+ Underlay Configuration
+ &lt;a class="anchor" href="#underlay-configuration">#&lt;/a>
+&lt;/h2>
+&lt;p>In addition to the configuration described in the
+&lt;a href="https://openperouter.github.io/docs/configuration/#underlay-configuration">underlay configuration section&lt;/a>,
+the SRv6 underlay requires IS-IS, an SRv6 locator, and at least one IPv6
+tunnel endpoint CIDR.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">namespace&lt;/span>: &lt;span style="color:#ae81ff">openperouter-system&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">spec&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">2001&lt;/span>:&lt;span style="color:#ae81ff">db8:1234::1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64520&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">ebgpMultiHop&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">2001&lt;/span>:&lt;span style="color:#ae81ff">db8:1234::2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64520&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">ebgpMultiHop&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaces&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">type&lt;/span>: &lt;span style="color:#ae81ff">NetworkDevice&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">networkDevice&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaceName&lt;/span>: &lt;span style="color:#ae81ff">toswitch1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">routeridcidr&lt;/span>: &lt;span style="color:#ae81ff">10.0.0.0&lt;/span>&lt;span style="color:#ae81ff">/24&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">tunnelEndpoint&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">cidrs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">2001&lt;/span>:&lt;span style="color:#ae81ff">db8:1234:5678::/64&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">isis&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">baseNet&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;49.0001.0002.0003.0004.00&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">level&lt;/span>: &lt;span style="color:#ae81ff">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">features&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#e6db74">&amp;#34;advertisePassiveOnly&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">srv6&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">locator&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">basePrefix&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;fd00:0:32::/48&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">format&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;usid-f3216&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="tunnel-endpoint">
+ Tunnel Endpoint
+ &lt;a class="anchor" href="#tunnel-endpoint">#&lt;/a>
+&lt;/h3>
+&lt;p>The &lt;code>tunnelEndpoint.cidrs&lt;/code> field must include at least one IPv6 CIDR when
+using SRv6. OpenPERouter automatically assigns a unique tunnel endpoint IP
+to each node from this range.&lt;/p></description></item><item><title>Graceful Restart</title><link>https://openperouter.github.io/docs/configuration/graceful-restart/</link><pubDate>Mon, 04 May 2026 00:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/graceful-restart/</guid><description>&lt;p>BGP Graceful Restart allows FRR to signal to peers that its forwarding state survives restarts. When enabled, peers preserve routes during the restart window instead of withdrawing them, bridging the control-plane gap with zero data-plane disruption.&lt;/p>
+&lt;p>For the conceptual explanation of how this fits into the resiliency architecture, see &lt;a href="https://openperouter.github.io/docs/concepts/resiliency/">Router Resiliency&lt;/a>.&lt;/p>
+&lt;h2 id="enabling-graceful-restart">
+ Enabling Graceful Restart
+ &lt;a class="anchor" href="#enabling-graceful-restart">#&lt;/a>
+&lt;/h2>
+&lt;p>Add the &lt;code>gracefulRestart&lt;/code> field to your Underlay CR. An empty object enables Graceful Restart with default values:&lt;/p></description></item><item><title>Running different configurations on different nodes</title><link>https://openperouter.github.io/docs/configuration/node-selector/</link><pubDate>Tue, 13 Jan 2026 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/node-selector/</guid><description>&lt;h2 id="overview">
  Overview
  &lt;a class="anchor" href="#overview">#&lt;/a>
 &lt;/h2>
@@ -56,8 +120,10 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">namespace&lt;/span>: &lt;span style="color:#ae81ff">openperouter-system&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">spec&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">nics&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">toswitch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaces&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">type&lt;/span>: &lt;span style="color:#ae81ff">NetworkDevice&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">networkDevice&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaceName&lt;/span>: &lt;span style="color:#ae81ff">toswitch&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64512&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">192.168.11.2&lt;/span>
@@ -82,9 +148,9 @@
  &lt;td>Yes&lt;/td>
  &lt;/tr>
  &lt;tr>
- &lt;td>&lt;code>nics&lt;/code>&lt;/td>
+ &lt;td>&lt;code>interfaces&lt;/code>&lt;/td>
  &lt;td>array&lt;/td>
- &lt;td>List of network interface names to move to router namespace&lt;/td>
+ &lt;td>List of underlay interfaces to use for connectivity. Each entry is a discriminated union; today only the &lt;code>NetworkDevice&lt;/code> type is supported, which moves an existing host network device into the router namespace&lt;/td>
  &lt;td>Yes&lt;/td>
  &lt;/tr>
  &lt;tr>
@@ -103,79 +169,80 @@
 &lt;/table>
 &lt;p>&lt;strong>Note&lt;/strong>: Unlike EVPN mode, passthrough mode does not require an &lt;code>evpn&lt;/code> field in the underlay configuration since no VTEP IP allocation is needed.&lt;/p></description></item><item><title>Sysctl Configuration</title><link>https://openperouter.github.io/docs/configuration/sysctl/</link><pubDate>Mon, 16 Feb 2026 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/sysctl/</guid><description>&lt;p>OpenPERouter automatically configures several kernel sysctl settings inside
 the router&amp;rsquo;s network namespace. These settings are applied every time the
-controller reconciles the network configuration and are required for correct
-traffic forwarding and fast failover during EVPN operations.&lt;/p>
+controller reconciles the network configuration and are required for
+correct traffic forwarding and fast failover.&lt;/p>
 &lt;p>No manual intervention is needed — the controller sets them for you. This
-page documents what each setting does, why it is required, and which kernel
-versions are needed.&lt;/p>
-&lt;h2 id="configured-sysctls">
- Configured Sysctls
- &lt;a class="anchor" href="#configured-sysctls">#&lt;/a>
+page documents what each setting does, why it is required, and which
+kernel versions are needed.&lt;/p>
+&lt;h2 id="common-sysctls">
+ Common Sysctls
+ &lt;a class="anchor" href="#common-sysctls">#&lt;/a>
 &lt;/h2>
-&lt;h3 id="ip-forwarding">
- IP Forwarding
- &lt;a class="anchor" href="#ip-forwarding">#&lt;/a>
-&lt;/h3>
-&lt;table>
- &lt;thead>
- &lt;tr>
- &lt;th>Sysctl&lt;/th>
- &lt;th>Value&lt;/th>
- &lt;/tr>
- &lt;/thead>
- &lt;tbody>
- &lt;tr>
- &lt;td>&lt;code>net.ipv4.conf.all.forwarding&lt;/code>&lt;/td>
- &lt;td>&lt;code>1&lt;/code>&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>&lt;code>net.ipv6.conf.all.forwarding&lt;/code>&lt;/td>
- &lt;td>&lt;code>1&lt;/code>&lt;/td>
- &lt;/tr>
- &lt;/tbody>
-&lt;/table>
-&lt;p>IP forwarding must be enabled for the router namespace to forward traffic
-between interfaces. Without these settings, packets received on one
-interface cannot be routed to another and the router cannot function.&lt;/p></description></item><item><title>Systemd Mode</title><link>https://openperouter.github.io/docs/configuration/systemd-mode/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/systemd-mode/</guid><description>&lt;p>In systemd mode, OpenPERouter is configured via static files on the host instead of Kubernetes Custom Resources. See the &lt;a href="https://openperouter.github.io/docs/installation/systemd-mode/">Systemd Mode installation guide&lt;/a> for deployment instructions.&lt;/p>
+&lt;p>The following sysctls are always configured regardless of the overlay
+technology in use.&lt;/p></description></item><item><title>Troubleshooting Resiliency</title><link>https://openperouter.github.io/docs/configuration/troubleshooting-resiliency/</link><pubDate>Mon, 04 May 2026 00:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/troubleshooting-resiliency/</guid><description>&lt;p>Most FRR failures are self-healing: the container restarts, re-enters the persistent named namespace, and BGP Graceful Restart bridges the control-plane gap. This page covers scenarios that require operator intervention.&lt;/p>
+&lt;h2 id="checking-the-named-namespace">
+ Checking the Named Namespace
+ &lt;a class="anchor" href="#checking-the-named-namespace">#&lt;/a>
+&lt;/h2>
+&lt;p>Verify that the named namespace exists and is healthy:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Check if the namespace exists&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ip netns list | grep perouter
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># List interfaces inside the namespace&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ip netns exec perouter ip link show
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Check routes inside the namespace&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ip netns exec perouter ip route show
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Check FRR BGP session status&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl exec -n openperouter-system &amp;lt;router-pod&amp;gt; -c frr -- &lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span> vtysh -c &lt;span style="color:#e6db74">&amp;#34;show bgp summary&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e"># Check EVPN route exchange&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl exec -n openperouter-system &amp;lt;router-pod&amp;gt; -c frr -- &lt;span style="color:#ae81ff">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">&lt;/span> vtysh -c &lt;span style="color:#e6db74">&amp;#34;show bgp l2vpn evpn summary&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="recovery-full-namespace-rebuild">
+ Recovery: Full Namespace Rebuild
+ &lt;a class="anchor" href="#recovery-full-namespace-rebuild">#&lt;/a>
+&lt;/h2>
+&lt;p>&lt;strong>When to use&lt;/strong>: The node&amp;rsquo;s networking state is out of sync — stale interfaces, wrong IPs, partial failure, or manual interference.&lt;/p></description></item><item><title>Systemd Mode</title><link>https://openperouter.github.io/docs/configuration/systemd-mode/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/systemd-mode/</guid><description>&lt;p>In systemd mode, OpenPERouter is configured via static files on the host instead of Kubernetes Custom Resources. See the &lt;a href="https://openperouter.github.io/docs/installation/systemd-mode/">Systemd Mode installation guide&lt;/a> for deployment instructions.&lt;/p>
 &lt;h2 id="node-configuration">
  Node Configuration
  &lt;a class="anchor" href="#node-configuration">#&lt;/a>
 &lt;/h2>
-&lt;p>Each node requires a mandatory configuration file at &lt;code>/var/lib/openperouter/node-config.yaml&lt;/code>. This file must contain the &lt;code>nodeIndex&lt;/code>, a unique integer used for IPAM address allocation from the configured CIDRs:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">nodeIndex&lt;/span>: &lt;span style="color:#ae81ff">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">logLevel&lt;/span>: &lt;span style="color:#ae81ff">debug&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">Each `openpe_*.yaml` file contains the `spec` part of the corresponding Kubernetes Custom Resources. A file can contain any combination of `underlay`, `l3vnis`, `l2vnis`, `bgppassthrough`, and `rawfrrconfigs` fields, where each entry follows the same schema as the `spec` section of the equivalent CR (Underlay, L3VNI, L2VNI, L3Passthrough, RawFRRConfig)&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#ae81ff">```yaml&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">underlays&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">evpn&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">vtepCIDR&lt;/span>: &lt;span style="color:#ae81ff">100.65.0.0&lt;/span>&lt;span style="color:#ae81ff">/24&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">nics&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">eth0&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64512&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">192.168.111.1&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">l3vnis&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">vrf&lt;/span>: &lt;span style="color:#ae81ff">red&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">vni&lt;/span>: &lt;span style="color:#ae81ff">100&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">hostSession&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64514&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">hostASN&lt;/span>: &lt;span style="color:#ae81ff">64515&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">localCIDR&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">ipv4&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;192.169.10.0/24&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">ipv6&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;2001:db8:1::/64&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">l2vnis&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">vrf&lt;/span>: &lt;span style="color:#ae81ff">storage&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">vni&lt;/span>: &lt;span style="color:#ae81ff">300&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">vxlanport&lt;/span>: &lt;span style="color:#ae81ff">4789&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">hostmaster&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">type&lt;/span>: &lt;span style="color:#ae81ff">linux-bridge&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">linuxBridge&lt;/span>:
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">br-storage&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="splitting-configuration-across-files">
- Splitting Configuration Across Files
- &lt;a class="anchor" href="#splitting-configuration-across-files">#&lt;/a>
-&lt;/h3>
-&lt;p>Multiple files can coexist in the configs directory. This is useful when nodes share a common base configuration but require different underlays. For example, a shared VNI definition can live in one file while per-node underlay settings go in another:&lt;/p></description></item></channel></rss>
+&lt;p>Each node requires a mandatory configuration file at &lt;code>/var/lib/openperouter/node-config.yaml&lt;/code>. This file identifies the node and configures its unique index used for IPAM address allocation from the configured CIDRs.&lt;/p>
+&lt;p>The node index can be provided in two ways:&lt;/p>
+&lt;h4 id="static-node-index">
+ Static Node Index
+ &lt;a class="anchor" href="#static-node-index">#&lt;/a>
+&lt;/h4>
+&lt;p>Set &lt;code>nodeIndex.index&lt;/code> to a unique integer per node:&lt;/p></description></item><item><title>Node Status</title><link>https://openperouter.github.io/docs/configuration/node-status/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/node-status/</guid><description>&lt;h2 id="node-status">
+ Node Status
+ &lt;a class="anchor" href="#node-status">#&lt;/a>
+&lt;/h2>
+&lt;blockquote class="book-hint warning">
+ 
+**Work in progress**: 
+
+&lt;/blockquote>
+
+&lt;p>The node router configuration status can be viewed and monitored via the RouterNodeConfigurationStatus CRD.&lt;/p>
+&lt;p>Each node will have an associated RouterNodeConfigurationStatus CR resource indicate this node router configuration status.
+It reports the outcome of all configuration resources (e.g.: Underlay, L3VNI, L2VNI) affecting the node.
+In other words its the source of truth configuration health on that node.&lt;/p>
+&lt;p>Nodes:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>$ kubectl get no
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>NAME STATUS ROLES AGE VERSION
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>pe-kind-control-plane Ready control-plane 19h v1.34.7
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>pe-kind-worker Ready worker 19h v1.34.7
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Nodes router status:&lt;/p></description></item><item><title>Grout (DPDK Dataplane)</title><link>https://openperouter.github.io/docs/configuration/grout/</link><pubDate>Thu, 07 May 2026 09:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/grout/</guid><description>&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>&lt;a href="https://github.com/DPDK/grout">Grout&lt;/a> is an optional, DPDK-accelerated data plane that can replace the Linux kernel&amp;rsquo;s networking stack for packet forwarding in OpenPERouter. When enabled, grout handles VXLAN encapsulation/decapsulation and routing in user-space using poll-mode drivers, while &lt;a href="https://frrouting.org/">FRR&lt;/a> continues to manage the control plane (BGP, EVPN, route exchange).&lt;/p>
+&lt;p>The integration is opt-in: grout is disabled by default and enabling it does not affect existing kernel-based deployments.&lt;/p>
+&lt;h2 id="architecture">
+ Architecture
+ &lt;a class="anchor" href="#architecture">#&lt;/a>
+&lt;/h2>
+&lt;p>When grout is enabled, it runs as a sidecar container in the router DaemonSet pod. It exposes a UNIX socket that serves two consumers:&lt;/p></description></item></channel></rss>

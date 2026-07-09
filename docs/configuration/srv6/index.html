@@ -1,0 +1,173 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="How to configure OpenPERouter for SRv6 L3VPN"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://openperouter.github.io/docs/configuration/srv6/"><meta property="og:title" content="SRv6 L3VPN Configuration"><meta property="og:description" content="How to configure OpenPERouter for SRv6 L3VPN"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="docs"><meta property="article:published_time" content="2025-06-15T15:03:22+02:00"><meta property="article:modified_time" content="2025-06-15T15:03:22+02:00"><title>SRv6 L3VPN Configuration |</title><link rel=icon href=/favicon.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://openperouter.github.io/docs/configuration/srv6/><link rel=stylesheet href=/book.min.2e7ce48eaf00fccadaaeb959f24099141ea66d0cdfac20b0f39d0dd08c7817de.css integrity="sha256-Lnzkjq8A/MrarrlZ8kCZFB6mbQzfrCCw850N0Ix4F94=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/en.search.min.52f0890d5cf97f05e1e434f15d22aa77c4aad0932d6f30675f873816bf206012.js integrity="sha256-UvCJDVz5fwXh5DTxXSKqd8Sq0JMtbzBnX4c4Fr8gYBI=" crossorigin=anonymous></script><link rel=icon href=/favicon.svg type=image/svg+xml></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/images/logo_text.svg alt=Logo class=book-icon><span></span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><ul><li><a href=/docs/concepts/>Concepts</a><ul><li><a href=/docs/concepts/evpn/>EVPN - VXLan</a></li><li><a href=/docs/concepts/srv6/>SRv6 - L3VPN</a></li><li><a href=/docs/concepts/passthrough/>L3 Passthrough</a></li><li><a href=/docs/concepts/resiliency/>Router Resiliency</a></li></ul></li><li><a href=/docs/architecture/>Architecture</a></li><li><a href=/docs/installation/>Installation</a><ul><li><a href=/docs/installation/systemd-mode/>Systemd Mode</a></li></ul></li><li><a href=/docs/configuration/>Configuration</a><ul><li><a href=/docs/configuration/evpn/>EVPN Configuration</a></li><li><a href=/docs/configuration/srv6/ class=active>SRv6 L3VPN Configuration</a></li><li><a href=/docs/configuration/graceful-restart/>Graceful Restart</a></li><li><a href=/docs/configuration/node-selector/>Running different configurations on different nodes</a></li><li><a href=/docs/configuration/raw-frr-config/>Raw FRR Configuration</a></li><li><a href=/docs/configuration/passthrough/>Passthrough Configuration</a></li><li><a href=/docs/configuration/sysctl/>Sysctl Configuration</a></li><li><a href=/docs/configuration/troubleshooting-resiliency/>Troubleshooting Resiliency</a></li><li><a href=/docs/configuration/systemd-mode/>Systemd Mode</a></li><li><a href=/docs/configuration/node-status/>Node Status</a></li><li><a href=/docs/configuration/grout/>Grout (DPDK Dataplane)</a></li></ul></li><li><a href=/docs/examples/>Examples</a><ul><li><a href=/docs/examples/evpnexamples/>EVPN Examples</a><ul><li><a href=/docs/examples/evpnexamples/metallb/>MetalLB Integration</a></li><li><a href=/docs/examples/evpnexamples/kubevirt-multi-cluster/>Stretching a layer 2 overlay across multiple KubeVirt clusters</a></li><li><a href=/docs/examples/evpnexamples/calico/>Calico Integration</a></li><li><a href=/docs/examples/evpnexamples/kubevirt/>KubeVirt L2 Integration</a></li><li><a href=/docs/examples/evpnexamples/layer2/>Layer 2 Integration</a></li></ul></li><li><a href=/docs/examples/srv6examples/>SRv6 L3VPN Examples</a><ul><li><a href=/docs/examples/srv6examples/metallb/>MetalLB Integration</a></li><li><a href=/docs/examples/srv6examples/layer2/>Layer 2 Integration</a></li></ul></li><li><a href=/docs/examples/passthroughexamples/>Passthrough Examples</a><ul><li><a href=/docs/examples/passthroughexamples/metallb/>MetalLB Integration</a></li></ul></li></ul></li><li><a href=/docs/api-reference/>API Reference</a></li><li><a href=/docs/contributing/>Contributing</a><ul><li><a href=/docs/contributing/devenv/>The development environment</a></li><li><a href=/docs/contributing/code-of-conduct/>Code of Conduct</a></li><li><a href=/docs/contributing/ai-guidelines/>AI Guidelines</a></li><li><a href=/docs/contributing/how-to-release/>How to release</a></li></ul></li><li><a href=/docs/release-notes/>Release Notes</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>SRv6 L3VPN Configuration</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#underlay-configuration>Underlay Configuration</a><ul><li><a href=#tunnel-endpoint>Tunnel Endpoint</a></li><li><a href=#router-id>Router ID</a></li><li><a href=#is-is-configuration>IS-IS Configuration</a></li><li><a href=#srv6-configuration>SRv6 Configuration</a></li><li><a href=#neighbor-configuration>Neighbor Configuration</a></li></ul></li><li><a href=#l3vpn-configuration>L3VPN Configuration</a><ul><li><a href=#basic-l3vpn-configuration>Basic L3VPN Configuration</a></li><li><a href=#multiple-l3vpns-example>Multiple L3VPNs Example</a></li></ul></li><li><a href=#what-happens-during-reconciliation>What Happens During Reconciliation</a></li><li><a href=#l2vni-configuration>L2VNI Configuration</a><ul><li><a href=#l2vni-example>L2VNI Example</a></li></ul></li><li><a href=#validation-rules>Validation Rules</a></li><li><a href=#per-node-configuration>Per-Node Configuration</a></li><li><a href=#api-reference>API Reference</a></li></ul></nav></aside></header><article class="markdown book-article"><h2 id=underlay-configuration>Underlay Configuration
+<a class=anchor href=#underlay-configuration>#</a></h2><p>In addition to the configuration described in the
+<a href=https://openperouter.github.io/docs/configuration/#underlay-configuration>underlay configuration section</a>,
+the SRv6 underlay requires IS-IS, an SRv6 locator, and at least one IPv6
+tunnel endpoint CIDR.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>Underlay</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>underlay</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64514</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>neighbors</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>address</span>: <span style=color:#ae81ff>2001</span>:<span style=color:#ae81ff>db8:1234::1</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64520</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ebgpMultiHop</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>address</span>: <span style=color:#ae81ff>2001</span>:<span style=color:#ae81ff>db8:1234::2</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64520</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ebgpMultiHop</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>interfaces</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>type</span>: <span style=color:#ae81ff>NetworkDevice</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>networkDevice</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>interfaceName</span>: <span style=color:#ae81ff>toswitch1</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>routeridcidr</span>: <span style=color:#ae81ff>10.0.0.0</span><span style=color:#ae81ff>/24</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>tunnelEndpoint</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>cidrs</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>2001</span>:<span style=color:#ae81ff>db8:1234:5678::/64</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>isis</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>baseNet</span>: <span style=color:#e6db74>&#34;49.0001.0002.0003.0004.00&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>level</span>: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>features</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#e6db74>&#34;advertisePassiveOnly&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>srv6</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>locator</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>basePrefix</span>: <span style=color:#e6db74>&#34;fd00:0:32::/48&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>format</span>: <span style=color:#e6db74>&#34;usid-f3216&#34;</span>
+</span></span></code></pre></div><h3 id=tunnel-endpoint>Tunnel Endpoint
+<a class=anchor href=#tunnel-endpoint>#</a></h3><p>The <code>tunnelEndpoint.cidrs</code> field must include at least one IPv6 CIDR when
+using SRv6. OpenPERouter automatically assigns a unique tunnel endpoint IP
+to each node from this range.</p><p>Both IPv4 and IPv6 CIDRs may be specified for dual-stack operation (e.g.,
+when combining SRv6 with VXLAN for L2VNIs):</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>  <span style=color:#f92672>tunnelEndpoint</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>cidrs</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>100.65.0.0</span><span style=color:#ae81ff>/24</span>
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>2001</span>:<span style=color:#ae81ff>db8:1234:5678::/64</span>
+</span></span></code></pre></div><h3 id=router-id>Router ID
+<a class=anchor href=#router-id>#</a></h3><p>The <code>routeridcidr</code> field defines the IPv4 CIDR used for per-node router ID
+assignment. Each node receives a unique router ID from this range. Defaults
+to <code>10.0.0.0/24</code> if omitted.</p><h3 id=is-is-configuration>IS-IS Configuration
+<a class=anchor href=#is-is-configuration>#</a></h3><p>IS-IS is required when SRv6 is enabled. It provides the IGP underlay for
+SRv6 reachability.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>  <span style=color:#f92672>isis</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>baseNet</span>: <span style=color:#e6db74>&#34;49.0001.0002.0003.0004.00&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>level</span>: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>features</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#e6db74>&#34;advertisePassiveOnly&#34;</span>
+</span></span></code></pre></div><p>IS-IS with IPv6 is automatically enabled for all interfaces listed in the
+<code>interfaces</code> field of the underlay configuration.</p><p>For the full list of IS-IS configuration fields, see the
+<a href=https://openperouter.github.io/docs/api-reference/#isisconfig>ISISConfig API Reference</a>.</p><h3 id=srv6-configuration>SRv6 Configuration
+<a class=anchor href=#srv6-configuration>#</a></h3><p>The <code>srv6</code> section configures the SRv6 locator. SRv6 can only be enabled
+when IS-IS is also configured.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>  <span style=color:#f92672>srv6</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>locator</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>basePrefix</span>: <span style=color:#e6db74>&#34;fd00:0:32::/48&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>format</span>: <span style=color:#e6db74>&#34;usid-f3216&#34;</span>
+</span></span></code></pre></div><p>The <code>usid-f3216</code> format uses a block length of 32 bits and a node length
+of 16 bits with uSID behavior.</p><p>For the full list of SRv6 configuration fields, see the
+<a href=https://openperouter.github.io/docs/api-reference/#srv6config>SRV6Config API Reference</a>.</p><h3 id=neighbor-configuration>Neighbor Configuration
+<a class=anchor href=#neighbor-configuration>#</a></h3><p>In this example, we configure eBGP multihop neighbors:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>  <span style=color:#f92672>neighbors</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>address</span>: <span style=color:#ae81ff>2001</span>:<span style=color:#ae81ff>db8:1234::1</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64520</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>ebgpMultiHop</span>: <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><p>The <code>ebgpMultiHop</code> field indicates that the BGP peer is multiple hops
+away. OpenPERouter uses a heuristic to enable the correct network layer
+protocols for each neighbor unless <code>addressFamilies</code> is explicitly set,
+which overrides the automatic selection.</p><p>For the full list of underlay configuration fields, see the
+<a href=https://openperouter.github.io/docs/api-reference/#underlayspec>UnderlaySpec API Reference</a>.
+For neighbor configuration, see the
+<a href=https://openperouter.github.io/docs/api-reference/#neighbor>Neighbor API Reference</a>.</p><h2 id=l3vpn-configuration>L3VPN Configuration
+<a class=anchor href=#l3vpn-configuration>#</a></h2><p>L3VPN configurations define SRv6 IP VPN overlays. Each L3VPN creates a
+separate routing domain with explicit route distinguishers and route
+targets.</p><h3 id=basic-l3vpn-configuration>Basic L3VPN Configuration
+<a class=anchor href=#basic-l3vpn-configuration>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>L3VPN</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>hostsession</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64514</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>hostasn</span>: <span style=color:#ae81ff>64515</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>localcidr</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>ipv4</span>: <span style=color:#ae81ff>192.169.10.0</span><span style=color:#ae81ff>/24</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vrf</span>: <span style=color:#ae81ff>red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>rdAssignedNumber</span>: <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>exportRTs</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#e6db74>&#34;64514:100&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>importRTs</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#e6db74>&#34;64520:100&#34;</span>
+</span></span></code></pre></div><p>For the full list of L3VPN configuration fields, see the
+<a href=https://openperouter.github.io/docs/api-reference/#l3vpnspec>L3VPNSpec API Reference</a>.</p><h3 id=multiple-l3vpns-example>Multiple L3VPNs Example
+<a class=anchor href=#multiple-l3vpns-example>#</a></h3><p>You can create multiple L3VPNs for different network segments:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#75715e># Signal VPN</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>L3VPN</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>signal</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vrf</span>: <span style=color:#ae81ff>signal</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>rdAssignedNumber</span>: <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>importRTs</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#e6db74>&#34;64520:100&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>exportRTs</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#e6db74>&#34;64514:100&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>hostsession</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64514</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>hostasn</span>: <span style=color:#ae81ff>64515</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>localcidr</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>ipv4</span>: <span style=color:#ae81ff>192.168.10.0</span><span style=color:#ae81ff>/24</span>
+</span></span><span style=display:flex><span>---
+</span></span><span style=display:flex><span><span style=color:#75715e># OAM VPN</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>L3VPN</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>oam</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vrf</span>: <span style=color:#ae81ff>oam</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>rdAssignedNumber</span>: <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>importRTs</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#e6db74>&#34;64520:200&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>exportRTs</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#e6db74>&#34;64514:200&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>hostsession</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>asn</span>: <span style=color:#ae81ff>64514</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>hostasn</span>: <span style=color:#ae81ff>64515</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>localcidr</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>ipv4</span>: <span style=color:#ae81ff>192.168.20.0</span><span style=color:#ae81ff>/24</span>
+</span></span></code></pre></div><h2 id=what-happens-during-reconciliation>What Happens During Reconciliation
+<a class=anchor href=#what-happens-during-reconciliation>#</a></h2><p>When you create or update L3VPN configurations, OpenPERouter automatically:</p><ol><li><strong>Creates Network Interfaces</strong>: Sets up the Linux VRF named after the
+L3VPN</li><li><strong>Establishes Connectivity</strong>: Creates veth pair and moves one end to
+the router&rsquo;s namespace</li><li><strong>Assigns IP Addresses</strong>: Allocates IPs from the <code>localcidr</code> range:<ul><li>Router side: First IP in the CIDR (e.g., <code>192.169.10.1</code>)</li><li>Host side: Each node gets a free IP in the CIDR, starting from the
+second (e.g., <code>192.169.10.15</code>)</li></ul></li><li><strong>Creates BGP Session</strong>: Opens BGP session between router and host
+using the specified ASNs</li><li><strong>Configures SRv6</strong>: Sets up the SRv6 locator and SID allocation for
+the VRF</li></ol><h2 id=l2vni-configuration>L2VNI Configuration
+<a class=anchor href=#l2vni-configuration>#</a></h2><p>L2VNIs provide Layer 2 connectivity across nodes using EVPN as the control
+plane and VXLAN tunnels as the data plane, contrary to L3VPNs which use
+SRv6.</p><blockquote><p><strong>Note</strong>: <code>l2GatewayIPs</code> is not supported when using L3VPN (SRv6).
+L2VNIs with L3VPN provide Layer 2 pod-to-pod connectivity only.
+The <code>l2GatewayIPs</code> field is only available when using L3VNI
+(EVPN/VXLAN).</p></blockquote><p>For the full list of L2VNI configuration fields, see the
+<a href=https://openperouter.github.io/docs/api-reference/#l2vnispec>L2VNISpec API Reference</a>.</p><h3 id=l2vni-example>L2VNI Example
+<a class=anchor href=#l2vni-example>#</a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>openpe.openperouter.github.io/v1alpha1</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>L2VNI</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>l2red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#ae81ff>openperouter-system</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vni</span>: <span style=color:#ae81ff>210</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>vrf</span>: <span style=color:#ae81ff>red</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>hostmaster</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>type</span>: <span style=color:#ae81ff>linux-bridge</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>linuxBridge</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>autoCreate</span>: <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><h2 id=validation-rules>Validation Rules
+<a class=anchor href=#validation-rules>#</a></h2><ul><li>L3VPNs and L3VNIs <strong>cannot coexist</strong>. Use L3VPNs for
+SRv6 and L3VNIs for EVPN.</li><li>L3VPNs <strong>require</strong> an Underlay with SRv6 configuration on every node
+where they are applied.</li><li>SRv6 <strong>requires</strong> IS-IS to be configured on the Underlay.</li><li>SRv6 <strong>requires</strong> at least one IPv6 CIDR in <code>tunnelEndpoint.cidrs</code>.</li><li>L3VPN VRF names must be unique across all L3VPNs on a node.</li><li>L3VPN <code>rdAssignedNumber</code> values must be unique across all L3VPNs.</li></ul><h2 id=per-node-configuration>Per-Node Configuration
+<a class=anchor href=#per-node-configuration>#</a></h2><p>All SRv6 resources (Underlay with SRv6, L3VPN, and L2VNI) support the
+optional <code>nodeSelector</code> field, which allows you to target specific
+configurations to specific nodes. This is useful for:</p><ul><li>Multi-rack deployments with different L3VPNs per rack</li><li>Multi-datacenter clusters with zone-specific configurations</li><li>Selective deployment to worker nodes only</li><li>Hardware-specific configurations</li></ul><p>For detailed information and examples, see the
+<a href=https://openperouter.github.io/docs/configuration/node-selector/>Node Selector Configuration</a>
+documentation.</p><h2 id=api-reference>API Reference
+<a class=anchor href=#api-reference>#</a></h2><p>For detailed information about all available configuration fields,
+validation rules, and API specifications, see the
+<a href=https://openperouter.github.io/docs/api-reference/>API Reference</a> documentation.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#underlay-configuration>Underlay Configuration</a><ul><li><a href=#tunnel-endpoint>Tunnel Endpoint</a></li><li><a href=#router-id>Router ID</a></li><li><a href=#is-is-configuration>IS-IS Configuration</a></li><li><a href=#srv6-configuration>SRv6 Configuration</a></li><li><a href=#neighbor-configuration>Neighbor Configuration</a></li></ul></li><li><a href=#l3vpn-configuration>L3VPN Configuration</a><ul><li><a href=#basic-l3vpn-configuration>Basic L3VPN Configuration</a></li><li><a href=#multiple-l3vpns-example>Multiple L3VPNs Example</a></li></ul></li><li><a href=#what-happens-during-reconciliation>What Happens During Reconciliation</a></li><li><a href=#l2vni-configuration>L2VNI Configuration</a><ul><li><a href=#l2vni-example>L2VNI Example</a></li></ul></li><li><a href=#validation-rules>Validation Rules</a></li><li><a href=#per-node-configuration>Per-Node Configuration</a></li><li><a href=#api-reference>API Reference</a></li></ul></nav></div></aside></main></body></html>

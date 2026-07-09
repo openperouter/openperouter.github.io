@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docs on OpenPERouter official docs</title><link>https://openperouter.github.io/docs/</link><description>Recent content in Docs on OpenPERouter official docs</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 15 Jun 2025 15:03:22 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Architecture</title><link>https://openperouter.github.io/docs/architecture/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/architecture/</guid><description>&lt;p>This document describes the internal architecture of OpenPERouter and how its components work together to provide VPN functionality on Kubernetes nodes.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docs on</title><link>https://openperouter.github.io/docs/</link><description>Recent content in Docs on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 04 May 2026 00:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Architecture</title><link>https://openperouter.github.io/docs/architecture/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/architecture/</guid><description>&lt;p>This document describes the internal architecture of OpenPERouter and how its components work together to provide VPN functionality on Kubernetes nodes.&lt;/p>
 &lt;h2 id="system-overview">
  System Overview
  &lt;a class="anchor" href="#system-overview">#&lt;/a>
 &lt;/h2>
 &lt;p>OpenPERouter consists of three main components:&lt;/p>
 &lt;ol>
-&lt;li>&lt;strong>Router Pod&lt;/strong>: Runs &lt;a href="https://frrouting.org/">FRR&lt;/a> in a dedicated network namespace&lt;/li>
-&lt;li>&lt;strong>Controller Pod&lt;/strong>: Manages network configuration and orchestrates the router setup&lt;/li>
+&lt;li>&lt;strong>Router Pod&lt;/strong>: Runs &lt;a href="https://frrouting.org/">FRR&lt;/a> inside a persistent named network namespace that survives container restarts&lt;/li>
+&lt;li>&lt;strong>Controller Pod&lt;/strong>: Manages network configuration, namespace lifecycle, and orchestrates the router setup&lt;/li>
 &lt;li>&lt;strong>Labeler Pod&lt;/strong>: Assigns persistent node indices for resource allocation&lt;/li>
 &lt;/ol>
 &lt;h2 id="component-architecture">
@@ -41,7 +41,9 @@
 &lt;li>&lt;a href="#l2vni">L2VNI&lt;/a>&lt;/li>
 &lt;li>&lt;a href="#l3passthrough">L3Passthrough&lt;/a>&lt;/li>
 &lt;li>&lt;a href="#l3vni">L3VNI&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#l3vpn">L3VPN&lt;/a>&lt;/li>
 &lt;li>&lt;a href="#rawfrrconfig">RawFRRConfig&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#routernodeconfigurationstatus">RouterNodeConfigurationStatus&lt;/a>&lt;/li>
 &lt;li>&lt;a href="#underlay">Underlay&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h4 id="bfdsettings">
@@ -65,63 +67,122 @@
  &lt;tbody>
  &lt;tr>
  &lt;td>&lt;code>receiveInterval&lt;/code> &lt;em>integer&lt;/em>&lt;/td>
- &lt;td>The minimum interval that this system is capable of&lt;!-- raw HTML omitted -->receiving control packets in milliseconds.&lt;!-- raw HTML omitted -->Defaults to 300ms.&lt;/td>
+ &lt;td>receiveInterval is the minimum interval that this system is capable of&lt;!-- raw HTML omitted -->receiving control packets in milliseconds.&lt;!-- raw HTML omitted -->Defaults to 300ms.&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Maximum: 60000 &lt;!-- raw HTML omitted -->Minimum: 10 &lt;!-- raw HTML omitted -->Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;tr>
  &lt;td>&lt;code>transmitInterval&lt;/code> &lt;em>integer&lt;/em>&lt;/td>
- &lt;td>The minimum transmission interval (less jitter)&lt;!-- raw HTML omitted -->that this system wants to use to send BFD control packets in&lt;!-- raw HTML omitted -->milliseconds. Defaults to 300ms&lt;/td>
+ &lt;td>transmitInterval is the minimum transmission interval (less jitter)&lt;!-- raw HTML omitted -->that this system wants to use to send BFD control packets in&lt;!-- raw HTML omitted -->milliseconds. Defaults to 300ms&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Maximum: 60000 &lt;!-- raw HTML omitted -->Minimum: 10 &lt;!-- raw HTML omitted -->Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;tr>
  &lt;td>&lt;code>detectMultiplier&lt;/code> &lt;em>integer&lt;/em>&lt;/td>
- &lt;td>Configures the detection multiplier to determine&lt;!-- raw HTML omitted -->packet loss. The remote transmission interval will be multiplied&lt;!-- raw HTML omitted -->by this value to determine the connection loss detection timer.&lt;/td>
+ &lt;td>detectMultiplier configures the detection multiplier to determine&lt;!-- raw HTML omitted -->packet loss. The remote transmission interval will be multiplied&lt;!-- raw HTML omitted -->by this value to determine the connection loss detection timer.&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Maximum: 255 &lt;!-- raw HTML omitted -->Minimum: 2 &lt;!-- raw HTML omitted -->Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;tr>
  &lt;td>&lt;code>echoInterval&lt;/code> &lt;em>integer&lt;/em>&lt;/td>
- &lt;td>Configures the minimal echo receive transmission&lt;!-- raw HTML omitted -->interval that this system is capable of handling in milliseconds.&lt;!-- raw HTML omitted -->Defaults to 50ms&lt;/td>
+ &lt;td>echoInterval configures the minimal echo receive transmission&lt;!-- raw HTML omitted -->interval that this system is capable of handling in milliseconds.&lt;!-- raw HTML omitted -->Defaults to 50ms&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Maximum: 60000 &lt;!-- raw HTML omitted -->Minimum: 10 &lt;!-- raw HTML omitted -->Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;tr>
  &lt;td>&lt;code>echoMode&lt;/code> &lt;em>boolean&lt;/em>&lt;/td>
- &lt;td>Enables or disables the echo transmission mode.&lt;!-- raw HTML omitted -->This mode is disabled by default, and not supported on multi&lt;!-- raw HTML omitted -->hops setups.&lt;/td>
+ &lt;td>echoMode enables or disables the echo transmission mode.&lt;!-- raw HTML omitted -->This mode is disabled by default, and not supported on multi&lt;!-- raw HTML omitted -->hops setups.&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;tr>
  &lt;td>&lt;code>passiveMode&lt;/code> &lt;em>boolean&lt;/em>&lt;/td>
- &lt;td>Mark session as passive: a passive session will not&lt;!-- raw HTML omitted -->attempt to start the connection and will wait for control packets&lt;!-- raw HTML omitted -->from peer before it begins replying.&lt;/td>
+ &lt;td>passiveMode marks session as passive: a passive session will not&lt;!-- raw HTML omitted -->attempt to start the connection and will wait for control packets&lt;!-- raw HTML omitted -->from peer before it begins replying.&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;tr>
- &lt;td>&lt;code>minimumTtl&lt;/code> &lt;em>integer&lt;/em>&lt;/td>
- &lt;td>For multi hop sessions only: configure the minimum&lt;!-- raw HTML omitted -->expected TTL for an incoming BFD control packet.&lt;/td>
+ &lt;td>&lt;code>minimumTTL&lt;/code> &lt;em>integer&lt;/em>&lt;/td>
+ &lt;td>minimumTTL configures, for multi hop sessions only, the minimum&lt;!-- raw HTML omitted -->expected TTL for an incoming BFD control packet.&lt;/td>
  &lt;td>&lt;/td>
  &lt;td>Maximum: 254 &lt;!-- raw HTML omitted -->Minimum: 1 &lt;!-- raw HTML omitted -->Optional: {} &lt;!-- raw HTML omitted -->&lt;/td>
  &lt;/tr>
  &lt;/tbody>
 &lt;/table>
-&lt;h4 id="evpnconfig">
- EVPNConfig
- &lt;a class="anchor" href="#evpnconfig">#&lt;/a>
+&lt;h4 id="failedresource">
+ FailedResource
+ &lt;a class="anchor" href="#failedresource">#&lt;/a>
 &lt;/h4>
-&lt;p>EVPNConfig contains EVPN-VXLAN configuration for the underlay.&lt;/p></description></item><item><title>Release Notes</title><link>https://openperouter.github.io/docs/release-notes/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/release-notes/</guid><description>&lt;h2 id="release-notes">
+&lt;p>FailedResource describe failing router API resource&lt;/p></description></item><item><title>Release Notes</title><link>https://openperouter.github.io/docs/release-notes/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/release-notes/</guid><description>&lt;h2 id="release-notes">
  Release Notes
  &lt;a class="anchor" href="#release-notes">#&lt;/a>
 &lt;/h2>
-&lt;h2 id="release-v010">
- Release v0.1.0
- &lt;a class="anchor" href="#release-v010">#&lt;/a>
+&lt;h2 id="release-v020">
+ Release v0.2.0
+ &lt;a class="anchor" href="#release-v020">#&lt;/a>
 &lt;/h2>
 &lt;h3 id="new-features">
  New Features
  &lt;a class="anchor" href="#new-features">#&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>SRv6 l3vpn overlay and isis underlay implementation (#485, @andreaskaris)&lt;/li>
+&lt;li>Add support for IPv6 and unnumbered BGP underlay sessions with ToR switches&lt;/li>
+&lt;li>Add configurable import / export route-targets to l3vni (#197, @k-akashi)&lt;/li>
+&lt;li>Add support for BGP &lt;code>remote-as external&lt;/code>, &lt;code>remote-as internal&lt;/code> and for iBGP with ASNs.&lt;/li>
+&lt;li>DPDK/grout support for Underlay and L3Passthrough with tap interfaces (#338, @zeeke)&lt;/li>
+&lt;li>Make the router resilient to data plane crashes. (#317, @maiqueb)&lt;/li>
+&lt;li>Introduce per-resource configuration resilience. All failures are reported via RouterNodeConfigurationStatus with detailed conditions. (#423, @RamLavi)&lt;/li>
+&lt;li>Api: Introduce node router status API. Enable inspecting router configuration status on a spesific node via NodeRouterConfigurationStatus CRD. (#355, @ormergi)&lt;/li>
+&lt;li>Allow moving multiple nics in the OpenPERouter network namespace and allow setting multiple neighbors for the underlay. (#307, @fedepaol)&lt;/li>
+&lt;li>Allow ipv6 vteps for evpn / vxlan. (#514, @fedepaol)&lt;/li>
+&lt;li>Add RouteTarget type for L3VNI route targets. Also uses for L3VPN route targets in the SRv6 PR. (#518, @andreaskaris)&lt;/li>
+&lt;li>Allow deriving the node index from a network interface address in systemd mode, enabling the same node-config.yaml to be deployed across all nodes. (#472, @yahlifried)&lt;/li>
+&lt;li>Automatically set veth MTU to underlay NIC MTU minus 50 bytes (#304, @qinqon)&lt;/li>
+&lt;li>Have configurable vtysh timeout, defined from the helm / operator config. (#189, @maiqueb)&lt;/li>
+&lt;li>Mirror configuration consumed by static files to k8s resources for better visibility. (#469, @fedepaol)&lt;/li>
+&lt;li>Add an optional knob to delay the start of the controller systemd quadlet to start the reconciliation loop after user provided conditions are satisfied. (#487, @fedepaol)&lt;/li>
+&lt;li>Allow L2VNIs without a VRF to operate as pure L2 east-west overlays. (#346, @RamLavi)&lt;/li>
+&lt;/ul>
+&lt;h3 id="bug-fixes">
+ Bug fixes
+ &lt;a class="anchor" href="#bug-fixes">#&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>Add liveness probe to FRR container to restart the pod when FRR daemons crash and cannot be recovered by watchfrr. (#455, @andreaskaris)&lt;/li>
+&lt;li>Bridge refresher: don&amp;rsquo;t ping ipv6 lla neighbros, listen for neighbor events instead of polling for stale entries (#312, @fedepaol)&lt;/li>
+&lt;li>Correct the router component default container name (#319, @maiqueb)&lt;/li>
+&lt;li>Don&amp;rsquo;t fail when only rawConfig is provided. (#311, @fedepaol)&lt;/li>
+&lt;li>Fix VRF route import failures caused by namespace loopback (lo) being down. The VTEP IP is now assigned directly to lo instead of a separate lound dummy interface. (#467, @andreaskaris)&lt;/li>
+&lt;li>Fix start race condition where k8s api is available already, the static controller dies but the health port is not free yet, causing the k8sapicontroller to die because the port is not ready. (#325, @fedepaol)&lt;/li>
+&lt;li>Fix underlay interface not being moved back to the default network namespace on underlay deletion. The interface is now restored with its original IP addresses and link-up state. (#442, @andreaskaris)&lt;/li>
+&lt;li>Fix vulnerability GO-2026-5026 (#460, @andreaskaris)&lt;/li>
+&lt;li>Fix: add unreachable routes to prevent VRF escape (#242, @fdomain)&lt;/li>
+&lt;li>Monitor the frr container in systemd mode, if it restarts we reconfigure it. (#479, @fedepaol)&lt;/li>
+&lt;li>Reject l2gatewayip on disconnected L2VNI (#332, @RamLavi)&lt;/li>
+&lt;li>Do not set AddrGenModeNone on L2 VNI bridges. (#351, @maiqueb)&lt;/li>
+&lt;li>Fix duplicate address-family blocks in FRR passthrough configuration by removing unused neighborenableipfamily template calls. Remove IPFamily from frr_test.go for l3vni and passthrough input as it is never set by production code. (#474, @andreaskaris)&lt;/li>
+&lt;li>Pre-delete all interfaces in the router netns as part of the recovery procedure. This will greatly reduce the time it take the kernel to async delete the network namespace via &lt;code>cleanup_net()&lt;/code> (#463, @maiqueb)&lt;/li>
+&lt;li>Switch FRR logging from file to stdout, simplifying the container entrypoint and enabling native kubectl logs support. (#330, @qinqon)&lt;/li>
+&lt;li>Add exit after router bgp in FRR configuration (#302, @andreaskaris)&lt;/li>
+&lt;/ul>
+&lt;h3 id="breaking-api-changes">
+ Breaking API Changes
+ &lt;a class="anchor" href="#breaking-api-changes">#&lt;/a>
+&lt;/h3>
+&lt;ul>
+&lt;li>API types updated to comply with Kubernetes API conventions via kube-api-linter. Breaking changes: integer fields use int32/int64 instead of uint, duration fields replaced with seconds integers, optional fields use pointers. (#313, @qinqon)&lt;/li>
+&lt;li>API: Rename &lt;code>EVPNConfig&lt;/code> to &lt;code>TunnelEndpointConfig&lt;/code> in the Underlay CRD to better reflect its purpose and in preparation for SRv6 implementation. (#471, @andreaskaris)&lt;/li>
+&lt;li>Remove vtepInterface field from EVPNConfig. vtepCIDR is now the only (required) way to configure the VTEP source. (#461, @qinqon)&lt;/li>
+&lt;li>The Underlay &lt;code>spec.nics&lt;/code> field is replaced by &lt;code>spec.interfaces&lt;/code>, a discriminated union. Use &lt;code>interfaces: [{type: NetworkDevice, networkDevice: {interfaceName: &amp;lt;nic&amp;gt;}}]&lt;/code> instead of &lt;code>nics: [&amp;lt;nic&amp;gt;]&lt;/code>. action required (#517, @qinqon)&lt;/li>
+&lt;/ul>
+&lt;h2 id="release-v010">
+ Release v0.1.0
+ &lt;a class="anchor" href="#release-v010">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="new-features-1">
+ New Features
+ &lt;a class="anchor" href="#new-features-1">#&lt;/a>
 &lt;/h3>
 &lt;ul>
 &lt;li>Add NodeSelector field to Underlay, L2VNI, L3VNI and L3Passthrough. (#164, @qinqon)&lt;/li>
@@ -138,9 +199,9 @@
 &lt;li>Provide a mechanism to run OpenPERouter on the host as systemd unit via podman. (#158, @fedepaol)&lt;/li>
 &lt;li>Support dual stack for l2gatewayips field (#137, @qinqon)&lt;/li>
 &lt;/ul>
-&lt;h3 id="bug-fixes">
+&lt;h3 id="bug-fixes-1">
  Bug fixes
- &lt;a class="anchor" href="#bug-fixes">#&lt;/a>
+ &lt;a class="anchor" href="#bug-fixes-1">#&lt;/a>
 &lt;/h3>
 &lt;ul>
 &lt;li>Api: rename l2vni hostmaster type from bridge to linux-bridge (#175, @maiqueb)&lt;/li>
@@ -174,9 +235,9 @@
  Release v0.0.5
  &lt;a class="anchor" href="#release-v005">#&lt;/a>
 &lt;/h2>
-&lt;h3 id="bug-fixes-1">
+&lt;h3 id="bug-fixes-2">
  Bug fixes
- &lt;a class="anchor" href="#bug-fixes-1">#&lt;/a>
+ &lt;a class="anchor" href="#bug-fixes-2">#&lt;/a>
 &lt;/h3>
 &lt;ul>
 &lt;li>Fix flag &lt;code>--metrics-bind-address&lt;/code> being ignored on controller and nodemarker binaries (#148, @fdomain)&lt;/li>
@@ -187,9 +248,9 @@
  Release v0.0.4
  &lt;a class="anchor" href="#release-v004">#&lt;/a>
 &lt;/h2>
-&lt;h3 id="new-features-1">
+&lt;h3 id="new-features-2">
  New Features
- &lt;a class="anchor" href="#new-features-1">#&lt;/a>
+ &lt;a class="anchor" href="#new-features-2">#&lt;/a>
 &lt;/h3>
 &lt;ul>
 &lt;li>Add a multi-cluster demo setup (#126, @maiqueb)&lt;/li>
@@ -200,9 +261,9 @@ This might come handy for those scenarios where we want the host to reach the &a
 &lt;li>Enforce the session with the host / with the TOR to be ebgp. (#95, @fedepaol)&lt;/li>
 &lt;li>Optional hostsession in the L3VNI CRD, now it&amp;rsquo;s not mandatory to setup a session if a l3vni serves as L3 wrapper of a L2 VNI. (#102, @fedepaol)&lt;/li>
 &lt;/ul>
-&lt;h3 id="bug-fixes-2">
+&lt;h3 id="bug-fixes-3">
  Bug fixes
- &lt;a class="anchor" href="#bug-fixes-2">#&lt;/a>
+ &lt;a class="anchor" href="#bug-fixes-3">#&lt;/a>
 &lt;/h3>
 &lt;ul>
 &lt;li>Fix cr based validation of the nic name in the underlay crd. (#130, @fedepaol)&lt;/li>
