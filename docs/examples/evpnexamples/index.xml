@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>EVPN Examples on</title><link>https://openperouter.github.io/docs/examples/evpnexamples/</link><description>Recent content in EVPN Examples on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 14 Oct 2025 15:45:48 +0100</lastBuildDate><atom:link href="https://openperouter.github.io/docs/examples/evpnexamples/index.xml" rel="self" type="application/rss+xml"/><item><title>MetalLB Integration</title><link>https://openperouter.github.io/docs/examples/evpnexamples/metallb/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/evpnexamples/metallb/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with MetalLB to advertise LoadBalancer services across the EVPN fabric, enabling external access to Kubernetes services.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>EVPN Examples on</title><link>https://openperouter.github.io/docs/examples/evpnexamples/</link><description>Recent content in EVPN Examples on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 09 Jul 2026 00:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/examples/evpnexamples/index.xml" rel="self" type="application/rss+xml"/><item><title>MetalLB Integration</title><link>https://openperouter.github.io/docs/examples/evpnexamples/metallb/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/evpnexamples/metallb/</guid><description>&lt;p>This example demonstrates how to integrate OpenPERouter with MetalLB to advertise LoadBalancer services across the EVPN fabric, enabling external access to Kubernetes services.&lt;/p>
 &lt;h2 id="overview">
  Overview
  &lt;a class="anchor" href="#overview">#&lt;/a>
@@ -55,9 +55,28 @@ machines are connected to this bridge via Multus secondary interfaces of type
  Overview
  &lt;a class="anchor" href="#overview">#&lt;/a>
 &lt;/h2>
-&lt;p>A layer 2 VNI is created, exposing a layer 2 domain on the host. On each node, a pod is created with a macvlan interface enslaved to that domain via a Linux bridge.&lt;/p>
+&lt;p>A layer 2 VNI is created, exposing a layer 2 domain on the host. On each node, a pod is created with a macvlan interface attached to that domain via a Linux bridge.&lt;/p>
 &lt;h3 id="example-setup">
  Example Setup
  &lt;a class="anchor" href="#example-setup">#&lt;/a>
 &lt;/h3>
-&lt;p>The full example can be found in the &lt;a href="https://github.com/openperouter/openperouter/examples/evpn/layer2">project repository&lt;/a> and can be deployed by running:&lt;/p></description></item></channel></rss>
+&lt;p>The full example can be found in the &lt;a href="https://github.com/openperouter/openperouter/examples/evpn/layer2">project repository&lt;/a> and can be deployed by running:&lt;/p></description></item><item><title>Routing Between L2 Overlays</title><link>https://openperouter.github.io/docs/examples/evpnexamples/l2vnis-with-same-l3vni/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/evpnexamples/l2vnis-with-same-l3vni/</guid><description>&lt;p>This example demonstrates how to attach &lt;strong>multiple L2VNIs to the same L3VNI&lt;/strong> so that
+the L2 overlays become routable between each other, while still reaching the broader
+L3 domain.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>The &lt;a href="https://openperouter.github.io/docs/examples/evpnexamples/layer2/">Layer 2 Integration&lt;/a> example connects pods that share
+a single L2 subnet: traffic between them is bridged, never routed.&lt;/p>
+&lt;p>This example goes one step further. Two separate L2VNIs — each with its own subnet and
+anycast gateway — reference the &lt;strong>same&lt;/strong> L3VNI via &lt;code>routingDomain&lt;/code>. Because both L2
+segments live in the same VRF, OpenPERouter routes traffic between them locally, without
+leaving the overlay. This is the classic &lt;em>symmetric IRB&lt;/em> (Integrated Routing and
+Bridging) topology: every L2VNI is a bridge domain, and the shared L3VNI is the VRF that
+stitches them together.&lt;/p></description></item><item><title>Route Reflector</title><link>https://openperouter.github.io/docs/examples/evpnexamples/route-reflector/</link><pubDate>Thu, 09 Jul 2026 00:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/examples/evpnexamples/route-reflector/</guid><description>&lt;p>This example demonstrates how to run one node as a pure BGP route reflector (RFC 4456) that distributes EVPN routes between the other nodes, removing the need for a full iBGP mesh or for the Top-of-Rack fabric to reflect the routes.&lt;/p>
+&lt;h2 id="overview">
+ Overview
+ &lt;a class="anchor" href="#overview">#&lt;/a>
+&lt;/h2>
+&lt;p>The control-plane node runs a router with no tunnel endpoint: it does not participate in the data plane and only reflects control-plane routes. The worker nodes run a regular data-plane underlay whose only BGP session is the internal (iBGP) one to the route reflector.&lt;/p></description></item></channel></rss>

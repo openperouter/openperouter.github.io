@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An overview of OpenPERouter">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/docs/introduction/">
+  <meta property="og:title" content="Overview">
+  <meta property="og:description" content="An overview of OpenPERouter">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="docs">
+<title>Overview | </title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/docs/introduction/">
+<link rel="stylesheet" href="/book.min.9395e1503d31d4a124c180a4474d0489be11a51a6132cb08eb09700d269c3d4e.css" integrity="sha256-k5XhUD0x1KEkwYCkR00Eib4RpRphMssI6wlwDSacPU4=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.51f19900066374c991df0e790b3d87a3193b175381bacf16d6727f29bb59d446.js" integrity="sha256-UfGZAAZjdMmR3w55Cz2Hoxk7F1OBus8W1nJ/KbtZ1EY=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/images/logo_text.svg" alt="Logo" class="book-icon" /><span></span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/introduction/" class="active">Overview</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/" class="">Concepts</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/evpn/" class="">EVPN - VXLan</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/srv6/" class="">SRv6 - L3VPN</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/passthrough/" class="">L3 Passthrough</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/concepts/resiliency/" class="">Router Resiliency</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/architecture/" class="">Architecture</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/installation/" class="">Installation</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/installation/systemd-mode/" class="">Systemd Mode</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/" class="">Configuration</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/evpn/" class="">EVPN Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/srv6/" class="">SRv6 L3VPN Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/graceful-restart/" class="">Graceful Restart</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/route-reflector/" class="">Route Reflector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/node-selector/" class="">Running different configurations on different nodes</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/raw-frr-config/" class="">Raw FRR Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/passthrough/" class="">Passthrough Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/sysctl/" class="">Sysctl Configuration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/troubleshooting-resiliency/" class="">Troubleshooting Resiliency</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/systemd-mode/" class="">Systemd Mode</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/node-status/" class="">Node Status</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/configuration/grout/" class="">Grout (DPDK Dataplane)</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/" class="">Examples</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/" class="">EVPN Examples</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/metallb/" class="">MetalLB Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/kubevirt-multi-cluster/" class="">Stretching a layer 2 overlay across multiple KubeVirt clusters</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/calico/" class="">Calico Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/kubevirt/" class="">KubeVirt L2 Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/layer2/" class="">Layer 2 Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/evpnexamples/route-reflector/" class="">Route Reflector</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/srv6examples/" class="">SRv6 L3VPN Examples</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/srv6examples/metallb/" class="">MetalLB Integration</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/srv6examples/layer2/" class="">Layer 2 Integration</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/passthroughexamples/" class="">Passthrough Examples</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/examples/passthroughexamples/metallb/" class="">MetalLB Integration</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/troubleshoot/" class="">Troubleshoot</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/api-reference/" class="">API Reference</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/contributing/" class="">Contributing</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/contributing/devenv/" class="">The development environment</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/contributing/code-of-conduct/" class="">Code of Conduct</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/contributing/ai-guidelines/" class="">AI Guidelines</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/contributing/how-to-release/" class="">How to release</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/release-notes/" class="">Release Notes</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Overview</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#openperouter">OpenPERouter</a></li>
+    <li><a href="#enable-vpn-tunnels-in-your-cluster">Enable VPN tunnels in your cluster</a>
+      <ul>
+        <li><a href="#l3-overlays">L3 Overlays</a></li>
+      </ul>
+    </li>
+    <li><a href="#l2-overlays">L2 Overlays</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#why-run-the-router-on-the-host">Why Run the Router on the Host?</a></li>
+    <li><a href="#a-separate-network-namespace">A separate network namespace</a></li>
+    <li><a href="#integration-benefits">Integration Benefits</a>
+      <ul>
+        <li><a href="#seamless-bgp-integration">Seamless BGP Integration</a></li>
+        <li><a href="#l2-integration-with-multus">L2 integration with Multus</a></li>
+        <li><a href="#operational-advantages">Operational Advantages</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h2 id="openperouter">
+  OpenPERouter
+  <a class="anchor" href="#openperouter">#</a>
+</h2>
+<p>OpenPERouter is an open implementation of a Provider Edge (PE) router, designed
+to terminate multiple VPN protocols on Kubernetes nodes and expose a BGP
+interface to the host network.</p>
+<p><strong>This project is in the early stage of development. Use carefully!</strong></p>
+<h2 id="enable-vpn-tunnels-in-your-cluster">
+  Enable VPN tunnels in your cluster
+  <a class="anchor" href="#enable-vpn-tunnels-in-your-cluster">#</a>
+</h2>
+<p>OpenPERouter supports L3 and L2 overlays, and it integrates exactly like an
+external router.</p>
+<h3 id="l3-overlays">
+  L3 Overlays
+  <a class="anchor" href="#l3-overlays">#</a>
+</h3>
+<p>OpenPERouter can extend L3 VPN tunnels to any BGP enabled Kubernetes component,
+such as Calico, MetalLB, KubeVip, Cilium, FRR-K8s and many others, behaving as
+an external router.</p>
+<h2 id="l2-overlays">
+  L2 Overlays
+  <a class="anchor" href="#l2-overlays">#</a>
+</h2>
+<p>OpenPERouter supports L2 overlays too, allowing seamless communication between
+nodes using a stretched layer 2 domain. L2 Overlays can be used directly for
+nodes or they can integrate with Multus for pod secondary networks.</p>
+<p>Additionally, L2 overlays can be mapped to a L3 routing domain for more complex
+scenarios.</p>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<p>Where we normally have a node interacting with the TOR switch, which is
+configured to map the vlans to a given VPN tunnel, OpenPERouter runs directly in
+the node, exposing one Veth interface per VPN tunnel.</p>
+<p>After OpenPERouter is configured and deployed on a cluster, it can interact with
+any BGP-speaking component of the cluster, including FRR-K8s, MetalLB, Calico
+and others. The abstraction is as if a physical Provider Edge Router was moved
+inside the node.</p>
+<p>Here is a high level overview of the abstraction: on the left side, a classic
+Kubernetes deployment connected via vlan interfaces; on the right side, a
+deployment of OpenPERouter on a Kubernetes node:</p>
+<p>L3:</p>
+<p><img src="/images/openpedescription.svg" alt="Description of OpenPERouter, showcasing the l3 integration" /></p>
+<p>L2:</p>
+<p><img src="/images/openpedescriptionl2.svg" alt="Description of OpenPERouter, showcasing the l2 integration" /></p>
+<h2 id="why-run-the-router-on-the-host">
+  Why Run the Router on the Host?
+  <a class="anchor" href="#why-run-the-router-on-the-host">#</a>
+</h2>
+<p>Running the router directly on the host provides greater flexibility and
+simplifies configuration compared to manually setting up each VPN tunnel and
+mapping it to a VLAN on a traditional router. With OpenPERouter, the
+configuration is managed using Kubernetes Custom Resource Definitions (CRDs),
+allowing you to declaratively define VPN tunnels and their properties.</p>
+<h2 id="a-separate-network-namespace">
+  A separate network namespace
+  <a class="anchor" href="#a-separate-network-namespace">#</a>
+</h2>
+<p>The router runs in a separate network namespace, and interacts with the host
+using a veth pair serving as entry points for the overlays. This allows it to
+be seen as a completely external component from a networking point of view.</p>
+<p><img src="/images/openpeinside.svg" alt="" /></p>
+<h2 id="integration-benefits">
+  Integration Benefits
+  <a class="anchor" href="#integration-benefits">#</a>
+</h2>
+<h3 id="seamless-bgp-integration">
+  Seamless BGP Integration
+  <a class="anchor" href="#seamless-bgp-integration">#</a>
+</h3>
+<p>OpenPERouter behaves exactly like a physical PE router, enabling seamless
+integration with MetalLB, Calico, Cilium, FRR-K8s and any other BGP speaking
+component.</p>
+<h3 id="l2-integration-with-multus">
+  L2 integration with Multus
+  <a class="anchor" href="#l2-integration-with-multus">#</a>
+</h3>
+<p>With L2 overlays, the same configuration achievable with Vlans and Multus
+secondary interfaces can be achieved using OpenPERouter.</p>
+<h3 id="operational-advantages">
+  Operational Advantages
+  <a class="anchor" href="#operational-advantages">#</a>
+</h3>
+<p>A key operational advantage is that no changes are required to your existing
+external router or network fabric. You can deploy the solution without
+reconfiguring your current network infrastructure.</p>
+<p>OpenPERouter is a pluggable, CNI independent component that can run with your
+CNI of choice.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#openperouter">OpenPERouter</a></li>
+    <li><a href="#enable-vpn-tunnels-in-your-cluster">Enable VPN tunnels in your cluster</a>
+      <ul>
+        <li><a href="#l3-overlays">L3 Overlays</a></li>
+      </ul>
+    </li>
+    <li><a href="#l2-overlays">L2 Overlays</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#why-run-the-router-on-the-host">Why Run the Router on the Host?</a></li>
+    <li><a href="#a-separate-network-namespace">A separate network namespace</a></li>
+    <li><a href="#integration-benefits">Integration Benefits</a>
+      <ul>
+        <li><a href="#seamless-bgp-integration">Seamless BGP Integration</a></li>
+        <li><a href="#l2-integration-with-multus">L2 integration with Multus</a></li>
+        <li><a href="#operational-advantages">Operational Advantages</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

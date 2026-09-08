@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Configuration on</title><link>https://openperouter.github.io/docs/configuration/</link><description>Recent content in Configuration on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 07 May 2026 09:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/configuration/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN Configuration</title><link>https://openperouter.github.io/docs/configuration/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/evpn/</guid><description>&lt;h2 id="underlay-configuration">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Configuration on</title><link>https://openperouter.github.io/docs/configuration/</link><description>Recent content in Configuration on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 17 Jun 2026 00:00:00 +0200</lastBuildDate><atom:link href="https://openperouter.github.io/docs/configuration/index.xml" rel="self" type="application/rss+xml"/><item><title>EVPN Configuration</title><link>https://openperouter.github.io/docs/configuration/evpn/</link><pubDate>Sun, 15 Jun 2025 15:03:22 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/evpn/</guid><description>&lt;h2 id="underlay-configuration">
  Underlay Configuration
  &lt;a class="anchor" href="#underlay-configuration">#&lt;/a>
 &lt;/h2>
 &lt;p>In addition to the configuration described in the &lt;a href="https://openperouter.github.io/docs/configuration/#underlay-configuration">underlay configuration section&lt;/a>, the VTEP (Virtual Tunnel End Point) source must be configured via the &lt;code>evpn.vtepCIDR&lt;/code> field.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">network.openperouter.io/v1alpha1&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
@@ -28,7 +28,7 @@
 &lt;a href="https://openperouter.github.io/docs/configuration/#underlay-configuration">underlay configuration section&lt;/a>,
 the SRv6 underlay requires IS-IS, an SRv6 locator, and at least one IPv6
 tunnel endpoint CIDR.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">network.openperouter.io/v1alpha1&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
@@ -38,15 +38,13 @@ tunnel endpoint CIDR.&lt;/p>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">neighbors&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">2001&lt;/span>:&lt;span style="color:#ae81ff">db8:1234::1&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64520&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">ebgpMultiHop&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">address&lt;/span>: &lt;span style="color:#ae81ff">2001&lt;/span>:&lt;span style="color:#ae81ff">db8:1234::2&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">asn&lt;/span>: &lt;span style="color:#ae81ff">64520&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">ebgpMultiHop&lt;/span>: &lt;span style="color:#66d9ef">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">properties&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">type&lt;/span>: &lt;span style="color:#ae81ff">ebgpMultiHop&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaces&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#f92672">type&lt;/span>: &lt;span style="color:#ae81ff">NetworkDevice&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">networkDevice&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">interfaceName&lt;/span>: &lt;span style="color:#ae81ff">toswitch1&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">routeridcidr&lt;/span>: &lt;span style="color:#ae81ff">10.0.0.0&lt;/span>&lt;span style="color:#ae81ff">/24&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">routerIDCIDR&lt;/span>: &lt;span style="color:#ae81ff">10.0.0.0&lt;/span>&lt;span style="color:#ae81ff">/24&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">tunnelEndpoint&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">cidrs&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#ae81ff">2001&lt;/span>:&lt;span style="color:#ae81ff">db8:1234:5678::/64&lt;/span>
@@ -56,6 +54,7 @@ tunnel endpoint CIDR.&lt;/p>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">features&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#e6db74">&amp;#34;advertisePassiveOnly&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">srv6&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">encapBehavior&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;H.Encaps.Red&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">locator&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">basePrefix&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;fd00:0:32::/48&amp;#34;&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">format&lt;/span>: &lt;span style="color:#e6db74">&amp;#34;usid-f3216&amp;#34;&lt;/span>
@@ -71,7 +70,8 @@ to each node from this range.&lt;/p></description></item><item><title>Graceful R
  Enabling Graceful Restart
  &lt;a class="anchor" href="#enabling-graceful-restart">#&lt;/a>
 &lt;/h2>
-&lt;p>Add the &lt;code>gracefulRestart&lt;/code> field to your Underlay CR. An empty object enables Graceful Restart with default values:&lt;/p></description></item><item><title>Running different configurations on different nodes</title><link>https://openperouter.github.io/docs/configuration/node-selector/</link><pubDate>Tue, 13 Jan 2026 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/node-selector/</guid><description>&lt;h2 id="overview">
+&lt;p>Add the &lt;code>gracefulRestart&lt;/code> field to your Underlay CR. An empty object enables Graceful Restart with default values:&lt;/p></description></item><item><title>Route Reflector</title><link>https://openperouter.github.io/docs/configuration/route-reflector/</link><pubDate>Wed, 17 Jun 2026 00:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/route-reflector/</guid><description>&lt;p>A BGP Route Reflector (RFC 4456) lets a router re-advertise iBGP routes learned from one client to the other clients. This removes the need for a full iBGP mesh between nodes: instead of every router peering with every other router, the clients peer only with the reflector, and the reflector distributes the routes among them.&lt;/p>
+&lt;p>In OpenPERouter this is useful to distribute EVPN (type-2/type-3) and VTEP reachability routes between nodes without relying on the fabric, for scenarios where the fabric does not support EVPN.&lt;/p></description></item><item><title>Running different configurations on different nodes</title><link>https://openperouter.github.io/docs/configuration/node-selector/</link><pubDate>Tue, 13 Jan 2026 10:00:00 +0200</pubDate><guid>https://openperouter.github.io/docs/configuration/node-selector/</guid><description>&lt;h2 id="overview">
  Overview
  &lt;a class="anchor" href="#overview">#&lt;/a>
 &lt;/h2>
@@ -113,7 +113,7 @@ to each node from this range.&lt;/p></description></item><item><title>Graceful R
  Basic Underlay Configuration
  &lt;a class="anchor" href="#basic-underlay-configuration">#&lt;/a>
 &lt;/h3>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">openpe.openperouter.github.io/v1alpha1&lt;/span>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">apiVersion&lt;/span>: &lt;span style="color:#ae81ff">network.openperouter.io/v1alpha1&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">kind&lt;/span>: &lt;span style="color:#ae81ff">Underlay&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f92672">metadata&lt;/span>:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">name&lt;/span>: &lt;span style="color:#ae81ff">underlay&lt;/span>
@@ -150,7 +150,7 @@ to each node from this range.&lt;/p></description></item><item><title>Graceful R
  &lt;tr>
  &lt;td>&lt;code>interfaces&lt;/code>&lt;/td>
  &lt;td>array&lt;/td>
- &lt;td>List of underlay interfaces to use for connectivity. Each entry is a discriminated union; today only the &lt;code>NetworkDevice&lt;/code> type is supported, which moves an existing host network device into the router namespace&lt;/td>
+ &lt;td>List of underlay interfaces to use for connectivity. Each entry is a discriminated union; the &lt;code>NetworkDevice&lt;/code> type moves an existing host network device into the router namespace, while the &lt;code>CNIDevice&lt;/code> type provisions an interface inside the router namespace via a CNI plugin. All entries must use the same type: mixing &lt;code>NetworkDevice&lt;/code> and &lt;code>CNIDevice&lt;/code> interfaces is rejected&lt;/td>
  &lt;td>Yes&lt;/td>
  &lt;/tr>
  &lt;tr>
